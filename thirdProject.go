@@ -88,12 +88,12 @@ func work(drone *tello.Driver) {
 }
 
 func main() {
-	drone := tello.NewDriver("8890")
+	drone := tello.NewDriver("8888")
 
 	robot := gobot.NewRobot("Project 3: Drone",
 		[]gobot.Connection{},
 		[]gobot.Device{drone},
-		work,
+		basic,
 	)
 
 	err := robot.Start()
