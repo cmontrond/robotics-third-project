@@ -2,22 +2,32 @@
 
 Third Project for COMP 570: Robotics at Bridgewater State University.<br>
 
-Lorem
+This project aims to create a drone, and a program that finds a face and then will follow that person, without 
+running into the person. <br>
+By doing this project, the student will learn more advanced work in robotics with drones and video / computer vision.
 
 ## Details
 
-Lorem
+The robot / drone needs to:
+
+* Take off
+* Look for the target person
+* Follow the target person at a safe distance
+* Moving left, right, forward and back as needed
+* Allow the robot to be additionally directed by hand gesture recognition
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local robot for development 
+These instructions will get you a copy of the project up and running on your local drone for development 
 and testing purposes.
 
 ### Prerequisites
 
 * DJI Tello Drone
-* Have Go Installed
 * Have MPlayer Installed
+* Have Go Installed
+* Have Gobot Installed
+* Have OpenCV / GoCV Installed
 
 ### Running the Project
 

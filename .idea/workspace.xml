@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="69fd0c52-dfa1-43c3-89a5-4b9a87aad947" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thirdProject.go" beforeDir="false" afterPath="$PROJECT_DIR$/thirdProject.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +93,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604340621641</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fix problem with main robot loop">
+      <created>1604341966351</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1604341966351</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -104,14 +111,15 @@
     <MESSAGE value="add basic logic for using the drone's camera" />
     <MESSAGE value="add basic function to make the drone take off, move a little and then land" />
     <MESSAGE value="latest changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="latest changes" />
+    <MESSAGE value="fix problem with main robot loop" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix problem with main robot loop" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="381" y="0" key="CommitChangelistDialog2" timestamp="1604340621189">
+    <state x="381" y="0" key="CommitChangelistDialog2" timestamp="1604341965963">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604027883576" />
-    <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1604340621189" />
+    <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1604341965963" />
     <state x="617" y="310" key="Github.ShareDialog" timestamp="1604025357997">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -120,26 +128,26 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="536" y="117" key="Github.UntrackedFilesDialog/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604025364509" />
-    <state width="1493" height="317" key="GridCell.Tab.0.bottom" timestamp="1604341676798">
+    <state width="1493" height="317" key="GridCell.Tab.0.bottom" timestamp="1604341948823">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1603914888221" />
-    <state width="1493" height="317" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1604341676798" />
-    <state width="1493" height="317" key="GridCell.Tab.0.center" timestamp="1604341676798">
+    <state width="1493" height="317" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1604341948823" />
+    <state width="1493" height="317" key="GridCell.Tab.0.center" timestamp="1604341948823">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1603914888221" />
-    <state width="1493" height="317" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1604341676798" />
-    <state width="1493" height="317" key="GridCell.Tab.0.left" timestamp="1604341676798">
+    <state width="1493" height="317" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1604341948823" />
+    <state width="1493" height="317" key="GridCell.Tab.0.left" timestamp="1604341948823">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1603914888221" />
-    <state width="1493" height="317" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1604341676798" />
-    <state width="1493" height="317" key="GridCell.Tab.0.right" timestamp="1604341676798">
+    <state width="1493" height="317" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1604341948823" />
+    <state width="1493" height="317" key="GridCell.Tab.0.right" timestamp="1604341948823">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1603914888221" />
-    <state width="1493" height="317" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1604341676798" />
+    <state width="1493" height="317" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1604341948823" />
     <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1603914888222">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -160,10 +168,10 @@
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1603914888222" />
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1603905843001" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1604340623965">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1604342039366">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604027885320" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1604340623965" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1604342039366" />
   </component>
 </project>
