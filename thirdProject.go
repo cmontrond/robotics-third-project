@@ -48,16 +48,16 @@ func basic(drone *tello.Driver) {
 		fmt.Printf("Error taking off: %+v\n", err)
 	}
 	gobot.After(3*time.Second, func() {
-		err = drone.Left(50)
+		err = drone.Left(30)
 		if err != nil {
 			fmt.Printf("Error moving left something: %+v\n", err)
 		}
-		time.Sleep(time.Second * 5)
-		err = drone.Right(50)
+		time.Sleep(time.Second * 2)
+		err = drone.Right(30)
 		if err != nil {
 			fmt.Printf("Error moving right something: %+v\n", err)
 		}
-		time.Sleep(time.Second * 3)
+		time.Sleep(time.Second * 2)
 		err = drone.Land()
 		if err != nil {
 			fmt.Printf("Error landing something: %+v\n", err)
@@ -90,10 +90,14 @@ func work(drone *tello.Driver) {
 func main() {
 	drone := tello.NewDriver("8888")
 
+	mainFunc := func() {
+		basic(drone)
+	}
+
 	robot := gobot.NewRobot("Project 3: Drone",
 		[]gobot.Connection{},
 		[]gobot.Device{drone},
-		basic,
+		mainFunc,
 	)
 
 	err := robot.Start()

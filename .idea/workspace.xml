@@ -86,7 +86,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604027883980</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="latest changes">
+      <created>1604340621641</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1604340621641</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -96,13 +103,15 @@
     <MESSAGE value="add basic readme and license files" />
     <MESSAGE value="add basic logic for using the drone's camera" />
     <MESSAGE value="add basic function to make the drone take off, move a little and then land" />
-    <option name="LAST_COMMIT_MESSAGE" value="add basic function to make the drone take off, move a little and then land" />
+    <MESSAGE value="latest changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="latest changes" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="381" y="0" key="CommitChangelistDialog2" timestamp="1604027883576">
+    <state x="381" y="0" key="CommitChangelistDialog2" timestamp="1604340621189">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604027883576" />
+    <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1604340621189" />
     <state x="617" y="310" key="Github.ShareDialog" timestamp="1604025357997">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -111,26 +120,26 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="536" y="117" key="Github.UntrackedFilesDialog/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604025364509" />
-    <state width="1493" height="294" key="GridCell.Tab.0.bottom" timestamp="1604340588250">
+    <state width="1493" height="317" key="GridCell.Tab.0.bottom" timestamp="1604341676798">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1603914888221" />
-    <state width="1493" height="294" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1604340588250" />
-    <state width="1493" height="294" key="GridCell.Tab.0.center" timestamp="1604340588250">
+    <state width="1493" height="317" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1604341676798" />
+    <state width="1493" height="317" key="GridCell.Tab.0.center" timestamp="1604341676798">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1603914888221" />
-    <state width="1493" height="294" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1604340588250" />
-    <state width="1493" height="294" key="GridCell.Tab.0.left" timestamp="1604340588250">
+    <state width="1493" height="317" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1604341676798" />
+    <state width="1493" height="317" key="GridCell.Tab.0.left" timestamp="1604341676798">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1603914888221" />
-    <state width="1493" height="294" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1604340588250" />
-    <state width="1493" height="294" key="GridCell.Tab.0.right" timestamp="1604340588250">
+    <state width="1493" height="317" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1604341676798" />
+    <state width="1493" height="317" key="GridCell.Tab.0.right" timestamp="1604341676798">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1603914888221" />
-    <state width="1493" height="294" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1604340588250" />
+    <state width="1493" height="317" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1604341676798" />
     <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1603914888222">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -151,9 +160,10 @@
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1603914888222" />
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1603905843001" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1604027885320">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1604340623965">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604027885320" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1604340623965" />
   </component>
 </project>
