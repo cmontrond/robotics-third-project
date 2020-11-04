@@ -28,7 +28,8 @@ func main() {
 	drone := Drone{driver: driver}
 
 	job := func() {
-		basic(drone)
+		//basic(drone)
+		work(drone)
 	}
 
 	robot := gobot.NewRobot("Project 3: Drone",

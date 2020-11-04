@@ -18,7 +18,7 @@ func SleepMilliSeconds(milliSeconds time.Duration) {
 }
 
 func SetupMplayer() io.WriteCloser {
-	mplayer := exec.Command("mplyaer", "-fps", "25", "-")
+	mplayer := exec.Command("mplayer", "-fps", "25", "-")
 
 	mplayerInput, err := mplayer.StdinPipe()
 	if err != nil {
