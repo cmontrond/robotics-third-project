@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/dji/tello"
+	"os/exec"
 	"time"
 )
 
@@ -172,9 +173,19 @@ func SetupVideo(drone *tello.Driver, rate tello.VideoBitRate) {
 }
 
 func SetupCamera(drone *tello.Driver, rate tello.VideoBitRate) {
-	mplayerInput := SetupMplayer()
+	mplayer := exec.Command("mplayer", "-fps", "25", "-")
 
-	err := drone.On(tello.ConnectedEvent, func(data interface{}) {
+	mplayerInput, err := mplayer.StdinPipe()
+	if err != nil {
+		fmt.Printf("Error creating input of mplayer: %+v\n", err)
+	}
+
+	err = mplayer.Start()
+	if err != nil {
+		fmt.Printf("Error starting mplayer: %+v\n", err)
+	}
+
+	err = drone.On(tello.ConnectedEvent, func(data interface{}) {
 		println("Connected")
 		SetupVideo(drone, rate)
 	})
