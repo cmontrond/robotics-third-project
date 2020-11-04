@@ -19,7 +19,16 @@ func basic(drone Drone) {
 }
 
 func work(drone Drone) {
-	drone.SetupCamera(4)
+	go func() {
+		drone.SetupCamera(4)
+	}()
+	go func() {
+		drone.TakeOff()
+		SleepSeconds(3)
+		drone.Hover()
+		SleepSeconds(3)
+		drone.Land()
+	}()
 }
 
 func main() {

@@ -173,6 +173,7 @@ func SetupVideo(drone *tello.Driver, rate tello.VideoBitRate) {
 }
 
 func SetupCamera(drone *tello.Driver, rate tello.VideoBitRate) {
+
 	mplayer := exec.Command("mplayer", "-fps", "25", "-")
 
 	mplayerInput, err := mplayer.StdinPipe()
