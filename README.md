@@ -13,8 +13,8 @@ The robot / drone needs to:
 * Take off
 * Look for the target person
 * Follow the target person at a safe distance
-* Moving left, right, forward and back as needed
-* Allow the robot to be additionally directed by hand gesture recognition
+* Move left, right, forward and back as needed
+* Be directed by hand gesture recognition
 
 ## Getting Started
 
