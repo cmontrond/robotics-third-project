@@ -29,6 +29,22 @@ func (drone Drone) Right(speed int) {
 	Right(drone.drone, speed)
 }
 
+func (drone Drone) Down(speed int) {
+	Down(drone.drone, speed)
+}
+
+func (drone Drone) Forward(speed int) {
+	Forward(drone.drone, speed)
+}
+
+func (drone Drone) Backward(speed int) {
+	Backward(drone.drone, speed)
+}
+
+func (drone Drone) Hover() {
+	Hover(drone.drone)
+}
+
 func (drone Drone) StartVideo() {
 	StartVideo(drone.drone)
 }
@@ -71,8 +87,33 @@ func Left(drone *tello.Driver, speed int) {
 func Right(drone *tello.Driver, speed int) {
 	err := drone.Right(speed)
 	if err != nil {
-		fmt.Printf("Error moving right something: %+v\n", err)
+		fmt.Printf("Error moving right: %+v\n", err)
 	}
+}
+
+func Down(drone *tello.Driver, speed int) {
+	err := drone.Down(speed)
+	if err != nil {
+		fmt.Printf("Error moving down: %+v\n", err)
+	}
+}
+
+func Forward(drone *tello.Driver, speed int) {
+	err := drone.Forward(speed)
+	if err != nil {
+		fmt.Printf("Error moving forward: %+v\n", err)
+	}
+}
+
+func Backward(drone *tello.Driver, speed int) {
+	err := drone.Backward(speed)
+	if err != nil {
+		fmt.Printf("Error moving backward: %+v\n", err)
+	}
+}
+
+func Hover(drone *tello.Driver) {
+	drone.Hover()
 }
 
 func StartVideo(drone *tello.Driver) {
