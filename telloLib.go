@@ -61,6 +61,14 @@ func (drone Drone) SetupCamera(rate tello.VideoBitRate) {
 	SetupCamera(drone.drone, rate)
 }
 
+func (drone Drone) Clockwise(speed int) {
+	Clockwise(drone.drone, speed)
+}
+
+func (drone Drone) CounterClockwise(speed int) {
+	CounterClockwise(drone.drone, speed)
+}
+
 // Functional Approach
 
 func TakeOff(drone *tello.Driver) {
@@ -109,6 +117,20 @@ func Backward(drone *tello.Driver, speed int) {
 	err := drone.Backward(speed)
 	if err != nil {
 		fmt.Printf("Error moving backward: %+v\n", err)
+	}
+}
+
+func Clockwise(drone *tello.Driver, speed int) {
+	err := drone.Clockwise(speed)
+	if err != nil {
+		fmt.Printf("Error moving clockwise: %+v\n", err)
+	}
+}
+
+func CounterClockwise(drone *tello.Driver, speed int) {
+	err := drone.CounterClockwise(speed)
+	if err != nil {
+		fmt.Printf("Error moving counter-clockwise: %+v\n", err)
 	}
 }
 
