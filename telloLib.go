@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+// Type Approach
+
 type Drone struct {
 	drone *tello.Driver
 }
@@ -42,6 +44,8 @@ func (drone Drone) SetupVideo(rate tello.VideoBitRate) {
 func (drone Drone) SetupCamera(rate tello.VideoBitRate) {
 	SetupCamera(drone.drone, rate)
 }
+
+// Functional Approach
 
 func TakeOff(drone *tello.Driver) {
 	err := drone.TakeOff()
