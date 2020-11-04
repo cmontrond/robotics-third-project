@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/dji/tello"
+	"time"
 )
 
 type Drone struct {
@@ -31,6 +33,10 @@ func (drone Drone) StartVideo() {
 
 func (drone Drone) SetVideoEncoderRate(rate tello.VideoBitRate) {
 	SetVideoEncoderRate(drone.drone, rate)
+}
+
+func (drone Drone) SetupVideo(rate tello.VideoBitRate) {
+	SetupVideo(drone.drone, rate)
 }
 
 func TakeOff(drone *tello.Driver) {
@@ -73,4 +79,12 @@ func SetVideoEncoderRate(drone *tello.Driver, rate tello.VideoBitRate) {
 	if err != nil {
 		fmt.Printf("Error setting video encoder rate: %+v\n", err)
 	}
+}
+
+func SetupVideo(drone *tello.Driver, rate tello.VideoBitRate) {
+	StartVideo(drone)
+	SetVideoEncoderRate(drone, rate)
+	gobot.Every(100*time.Millisecond, func() {
+		StartVideo(drone)
+	})
 }
