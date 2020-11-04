@@ -8,7 +8,7 @@ By doing this project, the student will learn more advanced work in robotics wit
 
 ## Details
 
-The robot / drone needs to:
+The robot / drone needs to be able to:
 
 * Take off
 * Look for the target person
