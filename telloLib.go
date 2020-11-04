@@ -25,6 +25,14 @@ func (drone Drone) Right(speed int) {
 	Right(drone.drone, speed)
 }
 
+func (drone Drone) StartVideo() {
+	StartVideo(drone.drone)
+}
+
+func (drone Drone) SetVideoEncoderRate(rate tello.VideoBitRate) {
+	SetVideoEncoderRate(drone.drone, rate)
+}
+
 func TakeOff(drone *tello.Driver) {
 	err := drone.TakeOff()
 	if err != nil {
@@ -50,5 +58,19 @@ func Right(drone *tello.Driver, speed int) {
 	err := drone.Right(speed)
 	if err != nil {
 		fmt.Printf("Error moving right something: %+v\n", err)
+	}
+}
+
+func StartVideo(drone *tello.Driver) {
+	err := drone.StartVideo()
+	if err != nil {
+		fmt.Printf("Error starting video: %+v\n", err)
+	}
+}
+
+func SetVideoEncoderRate(drone *tello.Driver, rate tello.VideoBitRate) {
+	err := drone.SetVideoEncoderRate(rate)
+	if err != nil {
+		fmt.Printf("Error setting video encoder rate: %+v\n", err)
 	}
 }

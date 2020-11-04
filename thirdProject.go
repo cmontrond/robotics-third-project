@@ -26,20 +26,20 @@ func setupMplayer() io.WriteCloser {
 }
 
 func setupDroneVideo(drone *tello.Driver) {
-	err := drone.StartVideo()
-	if err != nil {
-		fmt.Printf("Error starting video: %+v\n", err)
-	}
-	err = drone.SetVideoEncoderRate(4)
-	if err != nil {
-		fmt.Printf("Error setting video encoder rate: %+v\n", err)
-	}
+	// Functional Approach
+	StartVideo(drone)
+	SetVideoEncoderRate(drone, 4)
 	gobot.Every(100*time.Millisecond, func() {
-		err = drone.StartVideo()
-		if err != nil {
-			fmt.Printf("Error starting video: %+v\n", err)
-		}
+		StartVideo(drone)
 	})
+
+	// Type Approach
+	//myDrone := Drone{drone: drone}
+	//myDrone.StartVideo()
+	//myDrone.SetVideoEncoderRate(4)
+	//gobot.Every(100*time.Millisecond, func() {
+	//	myDrone.StartVideo()
+	//})
 }
 
 func basic(drone *tello.Driver) {

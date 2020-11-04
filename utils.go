@@ -2,12 +2,12 @@ package main
 
 import "time"
 
-func SleepSeconds(seconds int) {
-	duration := time.Duration(seconds) * time.Second
+func SleepSeconds(seconds time.Duration) {
+	duration := seconds * time.Second
 	time.Sleep(duration)
 }
 
-func SleepMilliSeconds(milliSeconds int) {
-	duration := time.Duration(milliSeconds) * time.Millisecond
+func SleepMilliSeconds(milliSeconds time.Duration) {
+	duration := milliSeconds * time.Millisecond
 	time.Sleep(duration)
 }
