@@ -10,67 +10,67 @@ import (
 // Type Approach
 
 type Drone struct {
-	drone *tello.Driver
+	driver *tello.Driver
 }
 
 func (drone Drone) TakeOff() {
-	TakeOff(drone.drone)
+	TakeOff(drone.driver)
 }
 
 func (drone Drone) Land() {
-	Land(drone.drone)
+	Land(drone.driver)
 }
 
 func (drone Drone) Left(speed int) {
-	Left(drone.drone, speed)
+	Left(drone.driver, speed)
 }
 
 func (drone Drone) Right(speed int) {
-	Right(drone.drone, speed)
+	Right(drone.driver, speed)
 }
 
 func (drone Drone) Up(speed int) {
-	Up(drone.drone, speed)
+	Up(drone.driver, speed)
 }
 
 func (drone Drone) Down(speed int) {
-	Down(drone.drone, speed)
+	Down(drone.driver, speed)
 }
 
 func (drone Drone) Forward(speed int) {
-	Forward(drone.drone, speed)
+	Forward(drone.driver, speed)
 }
 
 func (drone Drone) Backward(speed int) {
-	Backward(drone.drone, speed)
+	Backward(drone.driver, speed)
 }
 
 func (drone Drone) Clockwise(speed int) {
-	Clockwise(drone.drone, speed)
+	Clockwise(drone.driver, speed)
 }
 
 func (drone Drone) CounterClockwise(speed int) {
-	CounterClockwise(drone.drone, speed)
+	CounterClockwise(drone.driver, speed)
 }
 
 func (drone Drone) Hover() {
-	Hover(drone.drone)
+	Hover(drone.driver)
 }
 
 func (drone Drone) StartVideo() {
-	StartVideo(drone.drone)
+	StartVideo(drone.driver)
 }
 
 func (drone Drone) SetVideoEncoderRate(rate tello.VideoBitRate) {
-	SetVideoEncoderRate(drone.drone, rate)
+	SetVideoEncoderRate(drone.driver, rate)
 }
 
 func (drone Drone) SetupVideo(rate tello.VideoBitRate) {
-	SetupVideo(drone.drone, rate)
+	SetupVideo(drone.driver, rate)
 }
 
 func (drone Drone) SetupCamera(rate tello.VideoBitRate) {
-	SetupCamera(drone.drone, rate)
+	SetupCamera(drone.driver, rate)
 }
 
 // Functional Approach
@@ -179,7 +179,7 @@ func SetupCamera(drone *tello.Driver, rate tello.VideoBitRate) {
 		SetupVideo(drone, rate)
 	})
 	if err != nil {
-		fmt.Printf("Error setting ConnectedEvent event for drone: %+v\n", err)
+		fmt.Printf("Error setting ConnectedEvent event for driver: %+v\n", err)
 	}
 
 	err = drone.On(tello.VideoFrameEvent, func(data interface{}) {
@@ -189,6 +189,6 @@ func SetupCamera(drone *tello.Driver, rate tello.VideoBitRate) {
 		}
 	})
 	if err != nil {
-		fmt.Printf("Error setting VideoFrameEvent event for drone: %+v\n", err)
+		fmt.Printf("Error setting VideoFrameEvent event for driver: %+v\n", err)
 	}
 }

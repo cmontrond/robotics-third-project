@@ -19,7 +19,7 @@ func basic(drone *tello.Driver) {
 	})
 
 	// Type Approach
-	//myDrone := Drone{drone: drone}
+	//myDrone := Drone{driver: driver}
 	//
 	//myDrone.TakeOff()
 	//gobot.After(3*time.Second, func() {
@@ -36,21 +36,23 @@ func work(drone *tello.Driver) {
 	SetupCamera(drone, 4)
 
 	// Type approach
-	//myDrone := Drone{drone: drone}
+	//myDrone := Drone{driver: driver}
 	//myDrone.SetupCamera(4)
 }
 
 func main() {
-	drone := tello.NewDriver("8888")
+	driver := tello.NewDriver("8888")
 
-	mainFunc := func() {
-		basic(drone)
+	//driver := Drone{driver: driver}
+
+	job := func() {
+		basic(driver)
 	}
 
 	robot := gobot.NewRobot("Project 3: Drone",
 		[]gobot.Connection{},
-		[]gobot.Device{drone},
-		mainFunc,
+		[]gobot.Device{driver},
+		job,
 	)
 
 	err := robot.Start()
