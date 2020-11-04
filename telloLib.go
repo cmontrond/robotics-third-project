@@ -29,6 +29,10 @@ func (drone Drone) Right(speed int) {
 	Right(drone.drone, speed)
 }
 
+func (drone Drone) Up(speed int) {
+	Up(drone.drone, speed)
+}
+
 func (drone Drone) Down(speed int) {
 	Down(drone.drone, speed)
 }
@@ -39,6 +43,14 @@ func (drone Drone) Forward(speed int) {
 
 func (drone Drone) Backward(speed int) {
 	Backward(drone.drone, speed)
+}
+
+func (drone Drone) Clockwise(speed int) {
+	Clockwise(drone.drone, speed)
+}
+
+func (drone Drone) CounterClockwise(speed int) {
+	CounterClockwise(drone.drone, speed)
 }
 
 func (drone Drone) Hover() {
@@ -59,14 +71,6 @@ func (drone Drone) SetupVideo(rate tello.VideoBitRate) {
 
 func (drone Drone) SetupCamera(rate tello.VideoBitRate) {
 	SetupCamera(drone.drone, rate)
-}
-
-func (drone Drone) Clockwise(speed int) {
-	Clockwise(drone.drone, speed)
-}
-
-func (drone Drone) CounterClockwise(speed int) {
-	CounterClockwise(drone.drone, speed)
 }
 
 // Functional Approach
@@ -96,6 +100,13 @@ func Right(drone *tello.Driver, speed int) {
 	err := drone.Right(speed)
 	if err != nil {
 		fmt.Printf("Error moving right: %+v\n", err)
+	}
+}
+
+func Up(drone *tello.Driver, speed int) {
+	err := drone.Up(speed)
+	if err != nil {
+		fmt.Printf("Error moving up: %+v\n", err)
 	}
 }
 
