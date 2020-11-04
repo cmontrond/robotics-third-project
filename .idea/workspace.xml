@@ -4,6 +4,8 @@
     <list default="true" id="69fd0c52-dfa1-43c3-89a5-4b9a87aad947" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/telloLib.go" beforeDir="false" afterPath="$PROJECT_DIR$/telloLib.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thirdProject.go" beforeDir="false" afterPath="$PROJECT_DIR$/thirdProject.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +151,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604458347990</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="add setVideo method / function">
+      <created>1604458506700</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1604458506700</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,13 +176,14 @@
     <MESSAGE value="create utils file with helper functions" />
     <MESSAGE value="add type approach" />
     <MESSAGE value="add type approach for setupDroneVideo" />
-    <option name="LAST_COMMIT_MESSAGE" value="add type approach for setupDroneVideo" />
+    <MESSAGE value="add setVideo method / function" />
+    <option name="LAST_COMMIT_MESSAGE" value="add setVideo method / function" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2" timestamp="1604458347604">
+    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2" timestamp="1604458506319">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604458347604" />
+    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604458506319" />
     <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1604341965963" />
     <state x="617" y="310" key="Github.ShareDialog" timestamp="1604025357997">
       <screen x="0" y="0" width="1536" height="824" />
