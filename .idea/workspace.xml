@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69fd0c52-dfa1-43c3-89a5-4b9a87aad947" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/telloLib.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/thirdProject.go" beforeDir="false" afterPath="$PROJECT_DIR$/thirdProject.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -122,7 +121,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604455906548</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="create tello lib">
+      <created>1604456802756</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1604456802756</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -136,13 +142,14 @@
     <MESSAGE value="fix problem with main robot loop" />
     <MESSAGE value="update readme file" />
     <MESSAGE value="fix typos in readme file" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix typos in readme file" />
+    <MESSAGE value="create tello lib" />
+    <option name="LAST_COMMIT_MESSAGE" value="create tello lib" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="381" y="0" key="CommitChangelistDialog2" timestamp="1604455906180">
+    <state x="381" y="0" key="CommitChangelistDialog2" timestamp="1604456802375">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604455906180" />
+    <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604456802375" />
     <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1604341965963" />
     <state x="617" y="310" key="Github.ShareDialog" timestamp="1604025357997">
       <screen x="0" y="0" width="1536" height="824" />

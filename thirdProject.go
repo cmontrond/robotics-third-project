@@ -43,14 +43,24 @@ func setupDroneVideo(drone *tello.Driver) {
 }
 
 func basic(drone *tello.Driver) {
-	TakeOff(drone)
+	// Functional Approach
+	//TakeOff(drone)
+	//gobot.After(3*time.Second, func() {
+	//	Left(drone, 30)
+	//	time.Sleep(2 * time.Second)
+	//	Right(drone, 30)
+	//	time.Sleep(2 * time.Second)
+	//	Land(drone)
+	//})
+
+	// Type Approach
+	myDrone := Drone{drone: drone}
+
+	myDrone.TakeOff()
 	gobot.After(3*time.Second, func() {
-		Left(drone, 30)
-		time.Sleep(2 * time.Second)
-		Right(drone, 30)
-		time.Sleep(2 * time.Second)
-		Land(drone)
+		myDrone.Left(30)
 	})
+
 }
 
 func work(drone *tello.Driver) {
