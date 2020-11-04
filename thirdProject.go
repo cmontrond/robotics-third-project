@@ -43,25 +43,13 @@ func setupDroneVideo(drone *tello.Driver) {
 }
 
 func basic(drone *tello.Driver) {
-	err := drone.TakeOff()
-	if err != nil {
-		fmt.Printf("Error taking off: %+v\n", err)
-	}
+	TakeOff(drone)
 	gobot.After(3*time.Second, func() {
-		err = drone.Left(30)
-		if err != nil {
-			fmt.Printf("Error moving left something: %+v\n", err)
-		}
-		time.Sleep(time.Second * 2)
-		err = drone.Right(30)
-		if err != nil {
-			fmt.Printf("Error moving right something: %+v\n", err)
-		}
-		time.Sleep(time.Second * 2)
-		err = drone.Land()
-		if err != nil {
-			fmt.Printf("Error landing something: %+v\n", err)
-		}
+		Left(drone, 30)
+		time.Sleep(2 * time.Second)
+		Right(drone, 30)
+		time.Sleep(2 * time.Second)
+		Land(drone)
 	})
 }
 
