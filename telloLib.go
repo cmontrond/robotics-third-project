@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/dji/tello"
+	"gocv.io/x/gocv"
+	"io"
 	"os/exec"
 	"strconv"
 	"time"
@@ -218,7 +220,7 @@ func SetupCameraWithMplayer(drone *tello.Driver, rate tello.VideoBitRate, level 
 	}
 }
 
-func SetupCameraWithFfmpeg(drone *tello.Driver, rate tello.VideoBitRate, level int, frameX int, frameY int) {
+func SetupCameraWithFfmpeg(drone *tello.Driver, goCvWindow *gocv.Window, rate tello.VideoBitRate, level int, frameSize int, frameX int, frameY int) {
 	ffmpeg := exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
 		"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameX)+"x"+strconv.Itoa(frameY), "-f", "rawvideo", "pipe:1")
 
@@ -228,7 +230,7 @@ func SetupCameraWithFfmpeg(drone *tello.Driver, rate tello.VideoBitRate, level i
 		fmt.Printf("Error creating input of ffmpeg: %+v\n", err)
 	}
 
-	//ffmpegOut,err := ffmpeg.StdoutPipe()
+	ffmpegOut, err := ffmpeg.StdoutPipe()
 
 	if err != nil {
 		fmt.Printf("Error creating output of mplayer: %+v\n", err)
@@ -256,4 +258,23 @@ func SetupCameraWithFfmpeg(drone *tello.Driver, rate tello.VideoBitRate, level i
 	if err != nil {
 		fmt.Printf("Error setting VideoFrameEvent event for drone: %+v\n", err)
 	}
+
+	go func() {
+		for {
+			buf := make([]byte, frameSize)
+			if _, err := io.ReadFull(ffmpegOut, buf); err != nil {
+				fmt.Println(err)
+				continue
+			}
+			img, _ := gocv.NewMatFromBytes(frameY, frameX, gocv.MatTypeCV8UC3, buf)
+			if img.Empty() {
+				continue
+			}
+
+			goCvWindow.IMShow(img)
+			if goCvWindow.WaitKey(1) >= 0 {
+				break
+			}
+		}
+	}()
 }

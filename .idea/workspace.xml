@@ -4,6 +4,7 @@
     <list default="true" id="69fd0c52-dfa1-43c3-89a5-4b9a87aad947" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/telloLib.go" beforeDir="false" afterPath="$PROJECT_DIR$/telloLib.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thirdProject.go" beforeDir="false" afterPath="$PROJECT_DIR$/thirdProject.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -233,7 +234,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604515317473</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="add setup camera with ffmpeg">
+      <created>1604623950536</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1604623950536</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,18 +269,19 @@
     <MESSAGE value="clean code" />
     <MESSAGE value="fix mplayer typo" />
     <MESSAGE value="add goroutines" />
-    <option name="LAST_COMMIT_MESSAGE" value="add goroutines" />
+    <MESSAGE value="add setup camera with ffmpeg" />
+    <option name="LAST_COMMIT_MESSAGE" value="add setup camera with ffmpeg" />
   </component>
   <component name="WindowStateProjectService">
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604510609775">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1604510609775" />
-    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2" timestamp="1604515317121">
+    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2" timestamp="1604623950035">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604460778313" />
-    <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1604515317121" />
+    <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1604623950035" />
     <state x="147" y="65" key="DiffContextDialog" timestamp="1604508566344">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

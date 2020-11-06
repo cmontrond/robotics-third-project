@@ -20,7 +20,7 @@ func basic(drone Drone) {
 
 func work(drone Drone) {
 	go func() {
-		drone.SetupCamera(4)
+		drone.SetupCamera(4, 0)
 	}()
 
 	go func() {
