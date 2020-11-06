@@ -5,6 +5,7 @@ import (
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/dji/tello"
 	"os/exec"
+	"strconv"
 	"time"
 )
 
@@ -66,12 +67,16 @@ func (drone Drone) SetVideoEncoderRate(rate tello.VideoBitRate) {
 	SetVideoEncoderRate(drone.driver, rate)
 }
 
-func (drone Drone) SetupVideo(rate tello.VideoBitRate) {
-	SetupVideo(drone.driver, rate)
+func (drone Drone) SetExposureLevel(level int) {
+	SetExposureLevel(drone.driver, level)
 }
 
-func (drone Drone) SetupCamera(rate tello.VideoBitRate) {
-	SetupCamera(drone.driver, rate)
+func (drone Drone) SetupVideo(rate tello.VideoBitRate, level int) {
+	SetupVideo(drone.driver, rate, level)
+}
+
+func (drone Drone) SetupCamera(rate tello.VideoBitRate, level int) {
+	SetupCameraWithMplayer(drone.driver, rate, level)
 }
 
 // Functional Approach
@@ -164,15 +169,23 @@ func SetVideoEncoderRate(drone *tello.Driver, rate tello.VideoBitRate) {
 	}
 }
 
-func SetupVideo(drone *tello.Driver, rate tello.VideoBitRate) {
+func SetExposureLevel(drone *tello.Driver, level int) {
+	err := drone.SetExposure(level)
+	if err != nil {
+		fmt.Printf("Error setting exposure level: %+v\n", err)
+	}
+}
+
+func SetupVideo(drone *tello.Driver, rate tello.VideoBitRate, level int) {
 	StartVideo(drone)
 	SetVideoEncoderRate(drone, rate)
+	SetExposureLevel(drone, level)
 	gobot.Every(100*time.Millisecond, func() {
 		StartVideo(drone)
 	})
 }
 
-func SetupCamera(drone *tello.Driver, rate tello.VideoBitRate) {
+func SetupCameraWithMplayer(drone *tello.Driver, rate tello.VideoBitRate, level int) {
 
 	mplayer := exec.Command("mplayer", "-fps", "25", "-")
 
@@ -188,10 +201,10 @@ func SetupCamera(drone *tello.Driver, rate tello.VideoBitRate) {
 
 	err = drone.On(tello.ConnectedEvent, func(data interface{}) {
 		println("Connected")
-		SetupVideo(drone, rate)
+		SetupVideo(drone, rate, level)
 	})
 	if err != nil {
-		fmt.Printf("Error setting ConnectedEvent event for driver: %+v\n", err)
+		fmt.Printf("Error setting ConnectedEvent event for drone: %+v\n", err)
 	}
 
 	err = drone.On(tello.VideoFrameEvent, func(data interface{}) {
@@ -201,6 +214,46 @@ func SetupCamera(drone *tello.Driver, rate tello.VideoBitRate) {
 		}
 	})
 	if err != nil {
-		fmt.Printf("Error setting VideoFrameEvent event for driver: %+v\n", err)
+		fmt.Printf("Error setting VideoFrameEvent event for drone: %+v\n", err)
+	}
+}
+
+func SetupCameraWithFfmpeg(drone *tello.Driver, rate tello.VideoBitRate, level int, frameX int, frameY int) {
+	ffmpeg := exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
+		"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameX)+"x"+strconv.Itoa(frameY), "-f", "rawvideo", "pipe:1")
+
+	ffmpegIn, err := ffmpeg.StdinPipe()
+
+	if err != nil {
+		fmt.Printf("Error creating input of ffmpeg: %+v\n", err)
+	}
+
+	//ffmpegOut,err := ffmpeg.StdoutPipe()
+
+	if err != nil {
+		fmt.Printf("Error creating output of mplayer: %+v\n", err)
+	}
+
+	err = ffmpeg.Start()
+	if err != nil {
+		fmt.Printf("Error starting ffmpeg: %+v\n", err)
+	}
+
+	err = drone.On(tello.ConnectedEvent, func(data interface{}) {
+		println("Connected")
+		SetupVideo(drone, rate, level)
+	})
+	if err != nil {
+		fmt.Printf("Error setting ConnectedEvent event for drone: %+v\n", err)
+	}
+
+	err = drone.On(tello.VideoFrameEvent, func(data interface{}) {
+		packet := data.([]byte)
+		if _, err := ffmpegIn.Write(packet); err != nil {
+			fmt.Printf("Error writing to ffmpeg input: %+v\n", err)
+		}
+	})
+	if err != nil {
+		fmt.Printf("Error setting VideoFrameEvent event for drone: %+v\n", err)
 	}
 }
