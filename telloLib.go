@@ -77,8 +77,12 @@ func (drone Drone) SetupVideo(rate tello.VideoBitRate, level int) {
 	SetupVideo(drone.driver, rate, level)
 }
 
-func (drone Drone) SetupCamera(rate tello.VideoBitRate, level int) {
+func (drone Drone) SetupCameraWithMplayer(rate tello.VideoBitRate, level int) {
 	SetupCameraWithMplayer(drone.driver, rate, level)
+}
+
+func (drone Drone) SetupCameraWithFfmpeg(goCvWindow *gocv.Window, rate tello.VideoBitRate, level int, frameSize int, frameX int, frameY int) {
+	SetupCameraWithFfmpeg(drone.driver, goCvWindow, rate, level, frameSize, frameX, frameY)
 }
 
 // Functional Approach
