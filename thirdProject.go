@@ -12,88 +12,74 @@ import (
 )
 
 const (
-	frameSize = 960 * 720 * 3
+	frameX    = 400
+	frameY    = 300
+	frameSize = frameX * frameY * 3
 )
 
-func setupFfmpeg(frameX int, frameY int) (*exec.Cmd, io.WriteCloser, io.ReadCloser) {
-
-	ffmpeg := exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
+var (
+	// ffmpeg
+	ffmpeg = exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
 		"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameX)+"x"+strconv.Itoa(frameY), "-f", "rawvideo", "pipe:1")
 
-	ffmpegIn, err := ffmpeg.StdinPipe()
+	ffmpegIn, _  = ffmpeg.StdinPipe()
+	ffmpegOut, _ = ffmpeg.StdoutPipe()
 
-	if err != nil {
-		fmt.Printf("Error creating input of ffmpeg: %+v\n", err)
-	}
+	// GO CV
+	window     = gocv.NewWindow("Project 3 - Drone")
+	flightData *tello.FlightData
 
-	ffmpegOut, err := ffmpeg.StdoutPipe()
+	// Drone
+	drone = tello.NewDriver("8890")
+)
 
-	if err != nil {
-		fmt.Printf("Error creating output of mplayer: %+v\n", err)
-	}
+func init() {
+	// Drone events
+	go func() {
 
-	return ffmpeg, ffmpegIn, ffmpegOut
-}
+		if err := ffmpeg.Start(); err != nil {
+			fmt.Println(err)
+			return
+		}
 
-func basic(drone Drone) {
-	drone.TakeOff()
-	gobot.After(3*time.Second, func() {
-		drone.Left(30)
-		SleepSeconds(2)
-		drone.Right(30)
-		SleepSeconds(2)
-		drone.Land()
-	})
-}
+		drone.On(tello.FlightDataEvent, func(data interface{}) {
+			flightData = data.(*tello.FlightData)
+		})
 
-func work(drone Drone, window *gocv.Window, ffmpeg *exec.Cmd, ffmpegIn io.WriteCloser, ffmpegOut io.ReadCloser) {
-	//go func() {
-	//	drone.SetupCameraWithMplayer(4, 0)
-	//}()
+		drone.On(tello.ConnectedEvent, func(data interface{}) {
+			fmt.Println("Connected")
+			drone.StartVideo()
+			drone.SetVideoEncoderRate(tello.VideoBitRateAuto)
+			drone.SetExposure(0)
+			gobot.Every(100*time.Millisecond, func() {
+				drone.StartVideo()
+			})
+		})
 
-	//go func() {
-	//	println("Started move drone goroutine!")
-	//	drone.TakeOff()
-	//	SleepSeconds(1)
-	//	drone.Hover()
-	//	SleepSeconds(3)
-	//	drone.Land()
-	//}()
+		drone.On(tello.VideoFrameEvent, func(data interface{}) {
+			pkt := data.([]byte)
+			if _, err := ffmpegIn.Write(pkt); err != nil {
+				fmt.Println(err)
+			}
+		})
+
+		robot := gobot.NewRobot("Project 3 - Drone",
+			[]gobot.Connection{},
+			[]gobot.Device{drone},
+		)
+
+		robot.Start()
+	}()
 }
 
 func main() {
-	driver := tello.NewDriver("8888")
-	window := gocv.NewWindow("Project 3")
-
-	drone := Drone{driver: driver}
-
-	ffmpeg, ffmpegIn, ffmpegOut := setupFfmpeg(960, 720)
-
-	job := func() {
-		//basic(drone)
-		work(drone, window, ffmpeg, ffmpegIn, ffmpegOut)
-	}
-
-	robot := gobot.NewRobot("Project 3: Drone",
-		[]gobot.Connection{},
-		[]gobot.Device{driver},
-		job,
-	)
-
-	err := robot.Start(false)
-	if err != nil {
-		fmt.Printf("Error starting the Drone: %+v\n", err)
-	}
-
-	drone.SetupCameraWithFfmpeg(window, ffmpeg, ffmpegIn, ffmpegOut, 30, 0, frameSize, 960, 720)
-
 	for {
 		buf := make([]byte, frameSize)
 		if _, err := io.ReadFull(ffmpegOut, buf); err != nil {
 			fmt.Println(err)
 			continue
 		}
-		img, _ := gocv.NewMatFromBytes(720, 960, gocv.MatTypeCV8UC3, buf)
+		img, _ := gocv.NewMatFromBytes(frameY, frameX, gocv.MatTypeCV8UC3, buf)
 		if img.Empty() {
 			continue
 		}
