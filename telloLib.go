@@ -185,7 +185,7 @@ func SetupVideo(drone *tello.Driver, rate tello.VideoBitRate, level int) {
 	StartVideo(drone)
 	SetVideoEncoderRate(drone, rate)
 	SetExposureLevel(drone, level)
-	gobot.Every(100*time.Millisecond, func() {
+	gobot.Every(20*time.Millisecond, func() {
 		StartVideo(drone)
 	})
 }

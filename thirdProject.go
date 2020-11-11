@@ -47,10 +47,9 @@ func basic(drone Drone) {
 }
 
 func work(drone Drone, window *gocv.Window, ffmpeg *exec.Cmd, ffmpegIn io.WriteCloser, ffmpegOut io.ReadCloser) {
-	go func() {
-		//drone.SetupCameraWithMplayer(4, 0)
-		drone.SetupCameraWithFfmpeg(window, ffmpeg, ffmpegIn, ffmpegOut, 60, 0, frameSize, 960, 720)
-	}()
+	//go func() {
+	//	drone.SetupCameraWithMplayer(4, 0)
+	//}()
 
 	//go func() {
 	//	println("Started move drone goroutine!")
@@ -85,6 +84,8 @@ func main() {
 	if err != nil {
 		fmt.Printf("Error starting the Drone: %+v\n", err)
 	}
+
+	drone.SetupCameraWithFfmpeg(window, ffmpeg, ffmpegIn, ffmpegOut, 30, 0, frameSize, 960, 720)
 
 	for {
 		buf := make([]byte, frameSize)
