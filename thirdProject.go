@@ -5,7 +5,10 @@ import (
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/dji/tello"
 	"gocv.io/x/gocv"
+	"image/color"
 	"io"
+	"log"
+	"math"
 	"os/exec"
 	"strconv"
 	"time"
@@ -27,10 +30,20 @@ var (
 
 	// GO CV
 	window     = gocv.NewWindow("Project 3 - Drone")
-	flightData *tello.FlightData
+	green      = color.RGBA{G: 255}
+	classifier *gocv.CascadeClassifier
+
+	// tracking
+	tracking                 = false
+	detected                 = false
+	detectSize               = false
+	distTolerance            = 0.05 * dist(0, 0, frameX, frameY)
+	refDistance              float64
+	left, top, right, bottom float64
 
 	// Drone
-	drone = tello.NewDriver("8890")
+	drone      = tello.NewDriver("8890")
+	flightData *tello.FlightData
 )
 
 func init() {
@@ -72,7 +85,113 @@ func init() {
 	}()
 }
 
+func dist(x1, y1, x2, y2 float64) float64 {
+	return math.Sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1))
+}
+
+func trackFace(frame *gocv.Mat) {
+
+	W := float64(frame.Cols())
+	H := float64(frame.Rows())
+
+	//blob := gocv.BlobFromImage(*frame, 1.0, image.Pt(300, 300), gocv.NewScalar(104, 177, 123, 0), false, false)
+	//defer blob.Close()
+	//
+	//net.SetInput(blob, "data")
+	//
+	//detBlob := net.Forward("detection_out")
+	//defer detBlob.Close()
+	//
+	//detections := gocv.GetBlobChannel(detBlob, 0, 0)
+	//defer detections.Close()
+
+	imageRectangles := classifier.DetectMultiScale(*frame)
+
+	for _, rect := range imageRectangles {
+		log.Println("found a face,", rect)
+		gocv.Rectangle(frame, rect, green, 3)
+	}
+
+	//for r := 0; r < detections.Rows(); r++ {
+	//	confidence := detections.GetFloatAt(r, 2)
+	//	if confidence < 0.5 {
+	//		continue
+	//	}
+	//
+	//	left = float64(detections.GetFloatAt(r, 3)) * W
+	//	top = float64(detections.GetFloatAt(r, 4)) * H
+	//	right = float64(detections.GetFloatAt(r, 5)) * W
+	//	bottom = float64(detections.GetFloatAt(r, 6)) * H
+	//
+	//	left = math.Min(math.Max(0.0, left), W-1.0)
+	//	right = math.Min(math.Max(0.0, right), W-1.0)
+	//	bottom = math.Min(math.Max(0.0, bottom), H-1.0)
+	//	top = math.Min(math.Max(0.0, top), H-1.0)
+	//
+	//	detected = true
+	//	rect := image.Rect(int(left), int(top), int(right), int(bottom))
+	//	gocv.Rectangle(frame, rect, green, 3)
+	//}
+
+	if !tracking || !detected {
+		return
+	}
+
+	if detectSize {
+		detectSize = false
+		refDistance = dist(left, top, right, bottom)
+	}
+
+	distance := dist(left, top, right, bottom)
+
+	// x axis
+	switch {
+	case right < W/2:
+		//drone.CounterClockwise(50)
+		println("Drone should turn counter clockwise 50 ...")
+	case left > W/2:
+		//drone.Clockwise(50)
+		println("Drone should turn clockwise 50 ...")
+	default:
+		//drone.Clockwise(0)
+		println("Drone should turn counter clockwise 0 ...")
+	}
+
+	// y axis
+	switch {
+	case top < H/10:
+		//drone.Up(25)
+		println("Drone should move up...")
+	case bottom > H-H/10:
+		//drone.Down(25)
+		println("Drone should move down...")
+	default:
+		//drone.Up(0)
+		println("Drone should move up...")
+	}
+
+	// z axis
+	switch {
+	case distance < refDistance-distTolerance:
+		//drone.Forward(20)
+		println("Drone should move forward...")
+	case distance > refDistance+distTolerance:
+		//drone.Backward(20)
+		println("Drone should move backward...")
+	default:
+		//drone.Forward(0)
+		println("Drone should move forward")
+	}
+}
+
 func main() {
+
+	cascadeClassifier := gocv.NewCascadeClassifier()
+	cascadeClassifier.Load("haarcascade_frontalface_default.xml")
+	defer cascadeClassifier.Close()
+
+	classifier = &cascadeClassifier
+
 	for {
 		buf := make([]byte, frameSize)
 		if _, err := io.ReadFull(ffmpegOut, buf); err != nil {
@@ -83,6 +202,8 @@ func main() {
 		if img.Empty() {
 			continue
 		}
+
+		trackFace(&img)
 
 		window.IMShow(img)
 		if window.WaitKey(1) >= 0 {
