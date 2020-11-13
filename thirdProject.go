@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	frameX    = 400
-	frameY    = 300
+	frameX    = 360
+	frameY    = 240
 	frameSize = frameX * frameY * 3
 )
 
