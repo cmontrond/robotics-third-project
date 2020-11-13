@@ -209,7 +209,7 @@ func SetupCameraWithMplayer(drone *tello.Driver, rate tello.VideoBitRate, level 
 		SetupVideo(drone, rate, level)
 	})
 	if err != nil {
-		fmt.Printf("Error setting ConnectedEvent event for drone: %+v\n", err)
+		fmt.Printf("Error setting ConnectedEvent event for droneDriver: %+v\n", err)
 	}
 
 	err = drone.On(tello.VideoFrameEvent, func(data interface{}) {
@@ -219,7 +219,7 @@ func SetupCameraWithMplayer(drone *tello.Driver, rate tello.VideoBitRate, level 
 		}
 	})
 	if err != nil {
-		fmt.Printf("Error setting VideoFrameEvent event for drone: %+v\n", err)
+		fmt.Printf("Error setting VideoFrameEvent event for droneDriver: %+v\n", err)
 	}
 }
 
@@ -235,7 +235,7 @@ func SetupCameraWithFfmpeg(drone *tello.Driver, goCvWindow *gocv.Window, ffmpeg 
 		SetupVideo(drone, rate, level)
 	})
 	if err != nil {
-		fmt.Printf("Error setting ConnectedEvent event for drone: %+v\n", err)
+		fmt.Printf("Error setting ConnectedEvent event for droneDriver: %+v\n", err)
 	}
 
 	err = drone.On(tello.VideoFrameEvent, func(data interface{}) {
@@ -245,6 +245,6 @@ func SetupCameraWithFfmpeg(drone *tello.Driver, goCvWindow *gocv.Window, ffmpeg 
 		}
 	})
 	if err != nil {
-		fmt.Printf("Error setting VideoFrameEvent event for drone: %+v\n", err)
+		fmt.Printf("Error setting VideoFrameEvent event for droneDriver: %+v\n", err)
 	}
 }

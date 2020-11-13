@@ -42,8 +42,9 @@ var (
 	left, top, right, bottom float64
 
 	// Drone
-	drone      = tello.NewDriver("8890")
-	flightData *tello.FlightData
+	droneDriver = tello.NewDriver("8890")
+	drone       = Drone{droneDriver}
+	flightData  *tello.FlightData
 )
 
 func init() {
@@ -55,21 +56,21 @@ func init() {
 			return
 		}
 
-		drone.On(tello.FlightDataEvent, func(data interface{}) {
+		droneDriver.On(tello.FlightDataEvent, func(data interface{}) {
 			flightData = data.(*tello.FlightData)
 		})
 
-		drone.On(tello.ConnectedEvent, func(data interface{}) {
+		droneDriver.On(tello.ConnectedEvent, func(data interface{}) {
 			fmt.Println("Connected")
-			drone.StartVideo()
-			drone.SetVideoEncoderRate(tello.VideoBitRateAuto)
-			drone.SetExposure(0)
+			droneDriver.StartVideo()
+			droneDriver.SetVideoEncoderRate(tello.VideoBitRateAuto)
+			droneDriver.SetExposure(0)
 			gobot.Every(100*time.Millisecond, func() {
-				drone.StartVideo()
+				droneDriver.StartVideo()
 			})
 		})
 
-		drone.On(tello.VideoFrameEvent, func(data interface{}) {
+		droneDriver.On(tello.VideoFrameEvent, func(data interface{}) {
 			pkt := data.([]byte)
 			if _, err := ffmpegIn.Write(pkt); err != nil {
 				fmt.Println(err)
@@ -78,7 +79,7 @@ func init() {
 
 		robot := gobot.NewRobot("Project 3 - Drone",
 			[]gobot.Connection{},
-			[]gobot.Device{drone},
+			[]gobot.Device{droneDriver},
 		)
 
 		robot.Start()
@@ -147,39 +148,39 @@ func trackFace(frame *gocv.Mat) {
 	// x axis
 	switch {
 	case right < W/2:
-		//drone.CounterClockwise(50)
+		//droneDriver.CounterClockwise(50)
 		println("Drone should turn counter clockwise 50 ...")
 	case left > W/2:
-		//drone.Clockwise(50)
+		//droneDriver.Clockwise(50)
 		println("Drone should turn clockwise 50 ...")
 	default:
-		//drone.Clockwise(0)
+		//droneDriver.Clockwise(0)
 		println("Drone should turn counter clockwise 0 ...")
 	}
 
 	// y axis
 	switch {
 	case top < H/10:
-		//drone.Up(25)
+		//droneDriver.Up(25)
 		println("Drone should move up...")
 	case bottom > H-H/10:
-		//drone.Down(25)
+		//droneDriver.Down(25)
 		println("Drone should move down...")
 	default:
-		//drone.Up(0)
+		//droneDriver.Up(0)
 		println("Drone should move up...")
 	}
 
 	// z axis
 	switch {
 	case distance < refDistance-distTolerance:
-		//drone.Forward(20)
+		//droneDriver.Forward(20)
 		println("Drone should move forward...")
 	case distance > refDistance+distTolerance:
-		//drone.Backward(20)
+		//droneDriver.Backward(20)
 		println("Drone should move backward...")
 	default:
-		//drone.Forward(0)
+		//droneDriver.Forward(0)
 		println("Drone should move forward")
 	}
 }
