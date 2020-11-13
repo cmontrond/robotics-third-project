@@ -30,6 +30,7 @@ var (
 
 	// GO CV
 	window     = gocv.NewWindow("Project 3 - Drone")
+	net        *gocv.Net
 	green      = color.RGBA{G: 255}
 	classifier *gocv.CascadeClassifier
 
@@ -58,6 +59,7 @@ func init() {
 
 		droneDriver.On(tello.FlightDataEvent, func(data interface{}) {
 			flightData = data.(*tello.FlightData)
+			fmt.Printf("Battery Percentage: %v %", flightData.BatteryPercentage)
 		})
 
 		droneDriver.On(tello.ConnectedEvent, func(data interface{}) {
@@ -192,6 +194,20 @@ func main() {
 	defer cascadeClassifier.Close()
 
 	classifier = &cascadeClassifier
+
+	//model := "model.caffemodel"
+	//proto := "proto.txt"
+	//
+	//// open DNN classifier
+	//n := gocv.ReadNetFromCaffe(proto, model)
+	//if n.Empty() {
+	//	fmt.Printf("Error reading network model from : %v %v\n", proto, model)
+	//	return
+	//}
+	//net = &n
+	//defer net.Close()
+	//net.SetPreferableBackend(gocv.NetBackendDefault)
+	//net.SetPreferableTarget(gocv.NetTargetCPU)
 
 	for {
 		buf := make([]byte, frameSize)

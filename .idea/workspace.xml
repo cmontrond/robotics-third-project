@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69fd0c52-dfa1-43c3-89a5-4b9a87aad947" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/model.caffemodel" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proto.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telloLib.go" beforeDir="false" afterPath="$PROJECT_DIR$/telloLib.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/thirdProject.go" beforeDir="false" afterPath="$PROJECT_DIR$/thirdProject.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -288,14 +289,20 @@
       <option name="project" value="LOCAL" />
       <updated>1605070263132</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="use my custom drone class">
+      <created>1605226206670</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1605226206670</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="latest changes" />
     <MESSAGE value="fix problem with main robot loop" />
     <MESSAGE value="update readme file" />
     <MESSAGE value="fix typos in readme file" />
@@ -320,17 +327,18 @@
     <MESSAGE value="test code on linux" />
     <MESSAGE value="got drone camera working" />
     <MESSAGE value="got face detection working" />
-    <option name="LAST_COMMIT_MESSAGE" value="got face detection working" />
+    <MESSAGE value="use my custom drone class" />
+    <option name="LAST_COMMIT_MESSAGE" value="use my custom drone class" />
   </component>
   <component name="WindowStateProjectService">
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604510609775">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1604510609775" />
-    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2" timestamp="1605070262740">
+    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2" timestamp="1605226206102">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605070262740" />
+    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605226206102" />
     <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1604951579018" />
     <state x="147" y="65" key="DiffContextDialog" timestamp="1604508566344">
       <screen x="0" y="0" width="1536" height="824" />
@@ -344,25 +352,25 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="536" y="117" key="Github.UntrackedFilesDialog/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604025364509" />
-    <state width="1493" height="404" key="GridCell.Tab.0.bottom" timestamp="1605070269137">
+    <state width="1493" height="404" key="GridCell.Tab.0.bottom" timestamp="1605228144204">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="404" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605070269137" />
+    <state width="1493" height="404" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605228144204" />
     <state width="1493" height="404" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1604951667881" />
-    <state width="1493" height="404" key="GridCell.Tab.0.center" timestamp="1605070269137">
+    <state width="1493" height="404" key="GridCell.Tab.0.center" timestamp="1605228144204">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="404" key="GridCell.Tab.0.center/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605070269137" />
+    <state width="1493" height="404" key="GridCell.Tab.0.center/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605228144204" />
     <state width="1493" height="404" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1604951667880" />
-    <state width="1493" height="404" key="GridCell.Tab.0.left" timestamp="1605070269136">
+    <state width="1493" height="404" key="GridCell.Tab.0.left" timestamp="1605228144203">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="404" key="GridCell.Tab.0.left/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605070269136" />
+    <state width="1493" height="404" key="GridCell.Tab.0.left/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605228144203" />
     <state width="1493" height="404" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1604951667880" />
-    <state width="1493" height="404" key="GridCell.Tab.0.right" timestamp="1605070269137">
+    <state width="1493" height="404" key="GridCell.Tab.0.right" timestamp="1605228144204">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="404" key="GridCell.Tab.0.right/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605070269137" />
+    <state width="1493" height="404" key="GridCell.Tab.0.right/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605228144204" />
     <state width="1493" height="404" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1604951667880" />
     <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1603914888222">
       <screen x="0" y="0" width="1536" height="824" />
