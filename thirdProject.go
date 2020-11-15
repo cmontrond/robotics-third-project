@@ -5,9 +5,9 @@ import (
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/dji/tello"
 	"gocv.io/x/gocv"
+	"image"
 	"image/color"
 	"io"
-	"log"
 	"math"
 	"os/exec"
 	"strconv"
@@ -59,7 +59,6 @@ func init() {
 
 		droneDriver.On(tello.FlightDataEvent, func(data interface{}) {
 			flightData = data.(*tello.FlightData)
-			fmt.Printf("Battery Percentage: %v %", flightData.BatteryPercentage)
 		})
 
 		droneDriver.On(tello.ConnectedEvent, func(data interface{}) {
@@ -97,44 +96,37 @@ func trackFace(frame *gocv.Mat) {
 	W := float64(frame.Cols())
 	H := float64(frame.Rows())
 
-	//blob := gocv.BlobFromImage(*frame, 1.0, image.Pt(300, 300), gocv.NewScalar(104, 177, 123, 0), false, false)
-	//defer blob.Close()
-	//
-	//net.SetInput(blob, "data")
-	//
-	//detBlob := net.Forward("detection_out")
-	//defer detBlob.Close()
-	//
-	//detections := gocv.GetBlobChannel(detBlob, 0, 0)
-	//defer detections.Close()
+	blob := gocv.BlobFromImage(*frame, 1.0, image.Pt(300, 300), gocv.NewScalar(104, 177, 123, 0), false, false)
+	defer blob.Close()
 
-	imageRectangles := classifier.DetectMultiScale(*frame)
+	net.SetInput(blob, "data")
 
-	for _, rect := range imageRectangles {
-		log.Println("found a face,", rect)
+	detBlob := net.Forward("detection_out")
+	defer detBlob.Close()
+
+	detections := gocv.GetBlobChannel(detBlob, 0, 0)
+	defer detections.Close()
+
+	for r := 0; r < detections.Rows(); r++ {
+		confidence := detections.GetFloatAt(r, 2)
+		if confidence < 0.5 {
+			continue
+		}
+
+		left = float64(detections.GetFloatAt(r, 3)) * W
+		top = float64(detections.GetFloatAt(r, 4)) * H
+		right = float64(detections.GetFloatAt(r, 5)) * W
+		bottom = float64(detections.GetFloatAt(r, 6)) * H
+
+		left = math.Min(math.Max(0.0, left), W-1.0)
+		right = math.Min(math.Max(0.0, right), W-1.0)
+		bottom = math.Min(math.Max(0.0, bottom), H-1.0)
+		top = math.Min(math.Max(0.0, top), H-1.0)
+
+		detected = true
+		rect := image.Rect(int(left), int(top), int(right), int(bottom))
 		gocv.Rectangle(frame, rect, green, 3)
 	}
-
-	//for r := 0; r < detections.Rows(); r++ {
-	//	confidence := detections.GetFloatAt(r, 2)
-	//	if confidence < 0.5 {
-	//		continue
-	//	}
-	//
-	//	left = float64(detections.GetFloatAt(r, 3)) * W
-	//	top = float64(detections.GetFloatAt(r, 4)) * H
-	//	right = float64(detections.GetFloatAt(r, 5)) * W
-	//	bottom = float64(detections.GetFloatAt(r, 6)) * H
-	//
-	//	left = math.Min(math.Max(0.0, left), W-1.0)
-	//	right = math.Min(math.Max(0.0, right), W-1.0)
-	//	bottom = math.Min(math.Max(0.0, bottom), H-1.0)
-	//	top = math.Min(math.Max(0.0, top), H-1.0)
-	//
-	//	detected = true
-	//	rect := image.Rect(int(left), int(top), int(right), int(bottom))
-	//	gocv.Rectangle(frame, rect, green, 3)
-	//}
 
 	if !tracking || !detected {
 		return
@@ -189,25 +181,19 @@ func trackFace(frame *gocv.Mat) {
 
 func main() {
 
-	cascadeClassifier := gocv.NewCascadeClassifier()
-	cascadeClassifier.Load("haarcascade_frontalface_default.xml")
-	defer cascadeClassifier.Close()
+	model := "model.caffemodel"
+	proto := "proto.txt"
 
-	classifier = &cascadeClassifier
-
-	//model := "model.caffemodel"
-	//proto := "proto.txt"
-	//
-	//// open DNN classifier
-	//n := gocv.ReadNetFromCaffe(proto, model)
-	//if n.Empty() {
-	//	fmt.Printf("Error reading network model from : %v %v\n", proto, model)
-	//	return
-	//}
-	//net = &n
-	//defer net.Close()
-	//net.SetPreferableBackend(gocv.NetBackendDefault)
-	//net.SetPreferableTarget(gocv.NetTargetCPU)
+	// open DNN classifier
+	n := gocv.ReadNetFromCaffe(proto, model)
+	if n.Empty() {
+		fmt.Printf("Error reading network model from : %v %v\n", proto, model)
+		return
+	}
+	net = &n
+	defer net.Close()
+	net.SetPreferableBackend(gocv.NetBackendDefault)
+	net.SetPreferableTarget(gocv.NetTargetCPU)
 
 	for {
 		buf := make([]byte, frameSize)
