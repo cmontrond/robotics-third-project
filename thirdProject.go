@@ -5,7 +5,6 @@ import (
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/dji/tello"
 	"gocv.io/x/gocv"
-	"image"
 	"image/color"
 	"io"
 	"math"
@@ -44,15 +43,15 @@ var (
 	detectSize               = false
 	distTolerance            = 0.05 * dist(0, 0, frameX, frameY)
 	refDistance              float64
-	left, top, right, bottom int
+	left, top, right, bottom float64
 
 	// drone
 	drone      = tello.NewDriver("8890")
 	flightData *tello.FlightData
 )
 
-func dist(x1, y1, x2, y2 int) float64 {
-	return math.Sqrt(float64((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)))
+func dist(x1, y1, x2, y2 float64) float64 {
+	return math.Sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1))
 }
 
 func init() {
@@ -101,18 +100,28 @@ func trackFace(frame *gocv.Mat) {
 
 	imageRectangles := classifier.DetectMultiScale(*frame)
 
-	for _, rect := range imageRectangles {
-		fmt.Printf("Found a face: %v\n", rect)
+	if len(imageRectangles) == 0 {
+		return
+	}
 
-		left = rect.Min.X
-		top = rect.Max.Y
-		right = rect.Max.X
-		bottom = rect.Min.Y
+	for _, rect := range imageRectangles {
+		gocv.Rectangle(frame, rect, green, 3)
+		//fmt.Printf("Found a face: %v\n", rect)
+
+		left = float64(rect.Min.X) * W
+		top = float64(rect.Max.Y) * H
+		right = float64(rect.Max.X) * W
+		bottom = float64(rect.Min.Y) * H
+
+		left = math.Min(math.Max(0.0, left), W-1.0)
+		right = math.Min(math.Max(0.0, right), W-1.0)
+		bottom = math.Min(math.Max(0.0, bottom), H-1.0)
+		top = math.Min(math.Max(0.0, top), H-1.0)
 
 		detected = true
 
-		face := image.Rect(left, top, right, bottom)
-		gocv.Rectangle(frame, face, green, 3)
+		// TODO: Maybe display rectangle here and then overrride left/top/right using the W and H values
+		// TODO: Should disregard other faces
 	}
 
 	if !tracking || !detected {
@@ -128,10 +137,10 @@ func trackFace(frame *gocv.Mat) {
 
 	// x axis
 	switch {
-	case float64(right) < W/2:
+	case right < W/2:
 		//drone.CounterClockwise(50)
 		println("Drone moving counter clockwise...")
-	case float64(left) > W/2:
+	case left > W/2:
 		//drone.Clockwise(50)
 		println("Drone moving clockwise")
 	default:
@@ -141,10 +150,10 @@ func trackFace(frame *gocv.Mat) {
 
 	// y axis
 	switch {
-	case float64(top) < H/10:
+	case top < H/10:
 		//drone.Up(25)
 		println("Drone moving up...")
-	case float64(bottom) > H-H/10:
+	case bottom > H-H/10:
 		//drone.Down(25)
 		println("Drone moving Down...")
 	default:
@@ -190,6 +199,7 @@ func main() {
 
 		window.IMShow(img)
 		if window.WaitKey(10) >= 0 {
+			println("Land the robot...")
 			break
 		}
 	}
