@@ -25,6 +25,7 @@ and testing purposes.
 
 * DJI Tello Drone
 * Have MPlayer Installed
+* Have ffmpeg Installed
 * Have Go Installed
 * Have Gobot Installed
 * Have OpenCV / GoCV Installed
