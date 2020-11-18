@@ -27,9 +27,9 @@ var (
 	green      = color.RGBA{G: 255}
 
 	// tracking
-	tracking                 = false
+	tracking                 = true
 	detected                 = false
-	detectSize               = false
+	detectSize               = true
 	distTolerance            = 0.05 * dist(0, 0, frameX, frameY)
 	refDistance              float64
 	left, top, right, bottom float64
@@ -49,13 +49,11 @@ func trackFace(frame *gocv.Mat) {
 		return
 	}
 
-	faces := make(map[image.Rectangle]float64)
+	faces := make(map[float64]image.Rectangle)
 
 	for _, rect := range imageRectangles {
 		//gocv.Rectangle(frame, rect, green, 3)
 		//fmt.Printf("Found a face: %v\n", rect)
-
-		fmt.Printf("Face: %v\n", rect)
 
 		//left = float64(rect.Min.X) * W
 		//top = float64(rect.Max.Y) * H
@@ -79,7 +77,7 @@ func trackFace(frame *gocv.Mat) {
 
 		detected = true
 
-		faces[rect] = area
+		faces[area] = rect
 
 		// TODO: Maybe display rectangle here and then overrride left/top/right using the W and H values
 		// TODO: Should disregard other faces
@@ -94,8 +92,21 @@ func trackFace(frame *gocv.Mat) {
 		fmt.Printf("Top: %v\n\n", top)
 	}
 
-	if !tracking || !detected {
+	if !detected {
 		return
+	}
+
+	if len(faces) > 0 {
+		max := 0.0
+
+		for key, value := range faces {
+			if key > max {
+				fmt.Printf("Key: %v, Value: %v", key, value)
+				max = key
+			}
+		}
+
+		gocv.Rectangle(frame, faces[max], green, 3)
 	}
 
 	if detectSize {
