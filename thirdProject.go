@@ -90,7 +90,7 @@ func init() {
 			[]gobot.Device{drone},
 		)
 
-		robot.Start()
+		robot.Start(false)
 	}()
 }
 
@@ -183,7 +183,19 @@ func main() {
 	classifier = &cascadeClassifier
 	defer classifier.Close()
 
+	//doTakeOff := true
+
 	for {
+
+		//if doTakeOff {
+		//	drone.TakeOff()
+		//	drone.Up(30)
+		//	SleepSeconds(2)
+		//	doTakeOff = false
+		//} else {
+		//	drone.Hover()
+		//}
+
 		// get next frame from stream
 		buf := make([]byte, frameSize)
 		if _, err := io.ReadFull(ffmpegOut, buf); err != nil {
