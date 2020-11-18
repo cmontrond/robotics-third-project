@@ -2,15 +2,10 @@ package main
 
 import (
 	"fmt"
-	"gobot.io/x/gobot"
-	"gobot.io/x/gobot/platforms/dji/tello"
 	"gocv.io/x/gocv"
+	"image"
 	"image/color"
-	"io"
 	"math"
-	"os/exec"
-	"strconv"
-	"time"
 )
 
 type pair struct {
@@ -26,12 +21,6 @@ const (
 )
 
 var (
-	// ffmpeg command to decode video stream from drone
-	ffmpeg = exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
-		"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameX)+"x"+strconv.Itoa(frameY), "-f", "rawvideo", "pipe:1")
-	ffmpegIn, _  = ffmpeg.StdinPipe()
-	ffmpegOut, _ = ffmpeg.StdoutPipe()
-
 	// gocv
 	window     = gocv.NewWindow("Tello")
 	classifier *gocv.CascadeClassifier
@@ -44,54 +33,10 @@ var (
 	distTolerance            = 0.05 * dist(0, 0, frameX, frameY)
 	refDistance              float64
 	left, top, right, bottom float64
-
-	// drone
-	drone      = tello.NewDriver("8890")
-	flightData *tello.FlightData
 )
 
 func dist(x1, y1, x2, y2 float64) float64 {
 	return math.Sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1))
-}
-
-func init() {
-	// process drone events in separate goroutine for concurrency
-	go func() {
-
-		if err := ffmpeg.Start(); err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		drone.On(tello.FlightDataEvent, func(data interface{}) {
-			// TODO: protect flight data from race condition
-			flightData = data.(*tello.FlightData)
-		})
-
-		drone.On(tello.ConnectedEvent, func(data interface{}) {
-			fmt.Println("Connected")
-			drone.StartVideo()
-			drone.SetVideoEncoderRate(tello.VideoBitRateAuto)
-			drone.SetExposure(0)
-			gobot.Every(400*time.Millisecond, func() {
-				drone.StartVideo()
-			})
-		})
-
-		drone.On(tello.VideoFrameEvent, func(data interface{}) {
-			pkt := data.([]byte)
-			if _, err := ffmpegIn.Write(pkt); err != nil {
-				fmt.Println(err)
-			}
-		})
-
-		robot := gobot.NewRobot("Project 3 - Drone",
-			[]gobot.Connection{},
-			[]gobot.Device{drone},
-		)
-
-		robot.Start(false)
-	}()
 }
 
 func trackFace(frame *gocv.Mat) {
@@ -104,24 +49,49 @@ func trackFace(frame *gocv.Mat) {
 		return
 	}
 
+	faces := make(map[image.Rectangle]float64)
+
 	for _, rect := range imageRectangles {
-		gocv.Rectangle(frame, rect, green, 3)
+		//gocv.Rectangle(frame, rect, green, 3)
 		//fmt.Printf("Found a face: %v\n", rect)
 
-		left = float64(rect.Min.X) * W
-		top = float64(rect.Max.Y) * H
-		right = float64(rect.Max.X) * W
-		bottom = float64(rect.Min.Y) * H
+		fmt.Printf("Face: %v\n", rect)
+
+		//left = float64(rect.Min.X) * W
+		//top = float64(rect.Max.Y) * H
+		//right = float64(rect.Max.X) * W
+		//bottom = float64(rect.Min.Y) * H
+
+		left = float64(rect.Min.X)
+		top = float64(rect.Max.Y)
+		right = float64(rect.Max.X)
+		bottom = float64(rect.Min.Y)
 
 		left = math.Min(math.Max(0.0, left), W-1.0)
 		right = math.Min(math.Max(0.0, right), W-1.0)
 		bottom = math.Min(math.Max(0.0, bottom), H-1.0)
 		top = math.Min(math.Max(0.0, top), H-1.0)
 
+		w := right - left
+		h := top - bottom
+
+		area := w * h
+
 		detected = true
+
+		faces[rect] = area
 
 		// TODO: Maybe display rectangle here and then overrride left/top/right using the W and H values
 		// TODO: Should disregard other faces
+		fmt.Printf("face w: %v\n", w)
+		fmt.Printf("face h: %v\n", h)
+		fmt.Printf("face area: %v\n", area)
+		fmt.Printf("W: %v\n", W)
+		fmt.Printf("H: %v\n", H)
+		fmt.Printf("Left: %v\n", left)
+		fmt.Printf("Right: %v\n", right)
+		fmt.Printf("Bottom: %v\n", bottom)
+		fmt.Printf("Top: %v\n\n", top)
 	}
 
 	if !tracking || !detected {
@@ -183,6 +153,18 @@ func main() {
 	classifier = &cascadeClassifier
 	defer classifier.Close()
 
+	// open webcam
+	webcam, err := gocv.VideoCaptureDevice(0)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer webcam.Close()
+
+	// prepare image matrix
+	img := gocv.NewMat()
+	defer img.Close()
+
 	//doTakeOff := true
 
 	for {
@@ -196,13 +178,10 @@ func main() {
 		//	drone.Hover()
 		//}
 
-		// get next frame from stream
-		buf := make([]byte, frameSize)
-		if _, err := io.ReadFull(ffmpegOut, buf); err != nil {
-			fmt.Println(err)
-			continue
+		if ok := webcam.Read(&img); !ok {
+			fmt.Printf("cannot read device %d\n", 0)
+			return
 		}
-		img, _ := gocv.NewMatFromBytes(frameY, frameX, gocv.MatTypeCV8UC3, buf)
 		if img.Empty() {
 			continue
 		}
