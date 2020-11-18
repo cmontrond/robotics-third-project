@@ -81,15 +81,15 @@ func trackFace(frame *gocv.Mat) {
 
 		// TODO: Maybe display rectangle here and then overrride left/top/right using the W and H values
 		// TODO: Should disregard other faces
-		fmt.Printf("face w: %v\n", w)
-		fmt.Printf("face h: %v\n", h)
-		fmt.Printf("face area: %v\n", area)
-		fmt.Printf("W: %v\n", W)
-		fmt.Printf("H: %v\n", H)
-		fmt.Printf("Left: %v\n", left)
-		fmt.Printf("Right: %v\n", right)
-		fmt.Printf("Bottom: %v\n", bottom)
-		fmt.Printf("Top: %v\n\n", top)
+		//fmt.Printf("face w: %v\n", w)
+		//fmt.Printf("face h: %v\n", h)
+		//fmt.Printf("face area: %v\n", area)
+		//fmt.Printf("W: %v\n", W)
+		//fmt.Printf("H: %v\n", H)
+		//fmt.Printf("Left: %v\n", left)
+		//fmt.Printf("Right: %v\n", right)
+		//fmt.Printf("Bottom: %v\n", bottom)
+		//fmt.Printf("Top: %v\n\n", top)
 	}
 
 	if !detected {
@@ -99,9 +99,8 @@ func trackFace(frame *gocv.Mat) {
 	if len(faces) > 0 {
 		max := 0.0
 
-		for key, value := range faces {
+		for key := range faces {
 			if key > max {
-				fmt.Printf("Key: %v, Value: %v", key, value)
 				max = key
 			}
 		}
@@ -117,30 +116,30 @@ func trackFace(frame *gocv.Mat) {
 	distance := dist(left, top, right, bottom)
 
 	// x axis
-	switch {
-	case right < W/2:
-		//drone.CounterClockwise(50)
-		println("Drone moving counter clockwise...")
-	case left > W/2:
-		//drone.Clockwise(50)
-		println("Drone moving clockwise")
-	default:
-		//drone.Clockwise(0)
-		println("Drone not moving clockwise")
-	}
+	//switch {
+	//case right < W/2:
+	//	//drone.CounterClockwise(50)
+	//	println("Drone moving counter clockwise...")
+	//case left > W/2:
+	//	//drone.Clockwise(50)
+	//	println("Drone moving clockwise")
+	//default:
+	//	//drone.Clockwise(0)
+	//	println("Drone not moving clockwise")
+	//}
 
 	// y axis
-	switch {
-	case top < H/10:
-		//drone.Up(25)
-		println("Drone moving up...")
-	case bottom > H-H/10:
-		//drone.Down(25)
-		println("Drone moving Down...")
-	default:
-		//drone.Up(0)
-		println("Drone not moving up or down...")
-	}
+	//switch {
+	//case top < H/10:
+	//	//drone.Up(25)
+	//	println("Drone moving up...")
+	//case bottom > H-H/10:
+	//	//drone.Down(25)
+	//	println("Drone moving Down...")
+	//default:
+	//	//drone.Up(0)
+	//	println("Drone not moving up or down...")
+	//}
 
 	// z axis
 	switch {
