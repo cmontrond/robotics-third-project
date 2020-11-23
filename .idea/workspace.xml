@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="69fd0c52-dfa1-43c3-89a5-4b9a87aad947" name="Default Changelist" comment="code for following is working">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thirdProject.go" beforeDir="false" afterPath="$PROJECT_DIR$/thirdProject.go" afterDir="false" />
-    </list>
+    <list default="true" id="69fd0c52-dfa1-43c3-89a5-4b9a87aad947" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -319,14 +316,20 @@
       <option name="project" value="LOCAL" />
       <updated>1605668353398</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="add finger logic for tracking fingers count">
+      <created>1606007174414</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1606007174414</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="create tello lib" />
     <MESSAGE value="create utils file with helper functions" />
     <MESSAGE value="add type approach" />
     <MESSAGE value="add type approach for setupDroneVideo" />
@@ -351,17 +354,18 @@
     <MESSAGE value="fix code" />
     <MESSAGE value="only track the face with the largest area" />
     <MESSAGE value="code for following is working" />
-    <option name="LAST_COMMIT_MESSAGE" value="code for following is working" />
+    <MESSAGE value="add finger logic for tracking fingers count" />
+    <option name="LAST_COMMIT_MESSAGE" value="add finger logic for tracking fingers count" />
   </component>
   <component name="WindowStateProjectService">
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604510609775">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1604510609775" />
-    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2" timestamp="1606006635898">
+    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2" timestamp="1606007173935">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606006635898" />
+    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606007173935" />
     <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1605668353035" />
     <state width="427" height="466" key="DebuggerActiveHint" timestamp="1605234377939">
       <screen x="0" y="0" width="1536" height="824" />
@@ -379,25 +383,25 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="536" y="117" key="Github.UntrackedFilesDialog/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1604025364509" />
-    <state width="1493" height="373" key="GridCell.Tab.0.bottom" timestamp="1606007098793">
+    <state width="1493" height="373" key="GridCell.Tab.0.bottom" timestamp="1606009220803">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="373" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606007098793" />
+    <state width="1493" height="373" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606009220803" />
     <state width="1493" height="373" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1605720187569" />
-    <state width="1493" height="373" key="GridCell.Tab.0.center" timestamp="1606007098793">
+    <state width="1493" height="373" key="GridCell.Tab.0.center" timestamp="1606009220803">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="373" key="GridCell.Tab.0.center/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606007098793" />
+    <state width="1493" height="373" key="GridCell.Tab.0.center/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606009220803" />
     <state width="1493" height="373" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1605720187569" />
-    <state width="1493" height="373" key="GridCell.Tab.0.left" timestamp="1606007098793">
+    <state width="1493" height="373" key="GridCell.Tab.0.left" timestamp="1606009220802">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="373" key="GridCell.Tab.0.left/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606007098793" />
+    <state width="1493" height="373" key="GridCell.Tab.0.left/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606009220802" />
     <state width="1493" height="373" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1605720187568" />
-    <state width="1493" height="373" key="GridCell.Tab.0.right" timestamp="1606007098793">
+    <state width="1493" height="373" key="GridCell.Tab.0.right" timestamp="1606009220803">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="373" key="GridCell.Tab.0.right/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606007098793" />
+    <state width="1493" height="373" key="GridCell.Tab.0.right/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606009220803" />
     <state width="1493" height="373" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1605720187569" />
     <state width="1493" height="260" key="GridCell.Tab.1.bottom" timestamp="1605731804859">
       <screen x="0" y="0" width="1536" height="824" />
@@ -423,10 +427,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="277" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1605723712112" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1605668102814">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1606007176869">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605235253963" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606007176869" />
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1605668102814" />
     <state x="2177" y="-157" width="1277" height="811" key="dock-window-1" timestamp="1604456327059">
       <screen x="1920" y="-360" width="2560" height="1400" />
