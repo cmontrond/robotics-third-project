@@ -27,8 +27,12 @@ const (
 
 var (
 	// ffmpeg command to decode video stream from drone
-	ffmpeg = exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
-		"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameY)+"x"+strconv.Itoa(frameX), "-f", "rawvideo", "pipe:1")
+	//ffmpeg = exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
+	//	"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameY)+"x"+strconv.Itoa(frameX), "-f", "rawvideo", "pipe:1")
+
+	ffmpeg = exec.Command("ffmpeg", "-i", "pipe:0", "-pix_fmt", "bgr24", "-vcodec", "rawvideo",
+		"-an", "-sn", "-s", strconv.Itoa(frameY)+"x"+strconv.Itoa(frameX), "-f", "rawvideo", "pipe:1")
+
 	ffmpegIn, _  = ffmpeg.StdinPipe()
 	ffmpegOut, _ = ffmpeg.StdoutPipe()
 
@@ -163,7 +167,7 @@ func trackFace(frame *gocv.Mat) {
 
 		fmt.Printf("Face Rectangle: ", faces[max])
 
-		gocv.Rectangle(frame, faces[max], green, 3)
+		//gocv.Rectangle(frame, faces[max], green, 3)
 	}
 
 	if detectSize {
@@ -202,14 +206,14 @@ func trackFace(frame *gocv.Mat) {
 	// z axis
 	switch {
 	case distance < refDistance-distTolerance:
-		drone.Forward(80)
-		//println("Drone should move forward...")
+		//drone.Forward(80)
+		println("Drone should move forward...")
 	case distance > refDistance+distTolerance:
-		drone.Backward(80)
-		//println("Drone should move backward...")
+		//drone.Backward(80)
+		println("Drone should move backward...")
 	default:
-		drone.Forward(0)
-		//println("Drone should not move forward...")
+		//drone.Forward(0)
+		println("Drone should not move forward...")
 	}
 
 	// TODO: Do this only if the drone is at a safe enough distance
@@ -301,18 +305,20 @@ func main() {
 	classifier = &cascadeClassifier
 	defer classifier.Close()
 
-	doTakeOff := true
+	//doTakeOff := true
+
+	// TODO: Maybe put takeoff here
 
 	for {
 
-		if doTakeOff {
-			drone.TakeOff()
-			//drone.Up(30)
-			//SleepSeconds(2)
-			doTakeOff = false
-		} else {
-			drone.Hover()
-		}
+		//if doTakeOff {
+		//	drone.TakeOff()
+		//	//drone.Up(30)
+		//	//SleepSeconds(2)
+		//	doTakeOff = false
+		//} else {
+		//	drone.Hover()
+		//}
 
 		// get next frame from stream
 		buf := make([]byte, frameSize)
@@ -320,17 +326,17 @@ func main() {
 			fmt.Println(err)
 			continue
 		}
-		img, _ := gocv.NewMatFromBytes(frameY, frameX, gocv.MatTypeCV8UC3, buf)
+		img, _ := gocv.NewMatFromBytes(frameX, frameY, gocv.MatTypeCV8UC3, buf)
 		if img.Empty() {
 			continue
 		}
 
-		//img = ResizeImage(img, image.Point{
-		//	X: 90,
-		//	Y: 120,
-		//})
+		resizedImg := ResizeImage(img, image.Point{
+			X: 120,
+			Y: 90,
+		})
 
-		trackFace(&img)
+		trackFace(&resizedImg)
 
 		window.IMShow(img)
 		if window.WaitKey(10) >= 0 {
