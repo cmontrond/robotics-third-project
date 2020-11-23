@@ -8,6 +8,7 @@ import (
 	"image"
 	"image/color"
 	"io"
+	"log"
 	"math"
 	"os/exec"
 	"strconv"
@@ -308,6 +309,9 @@ func main() {
 	//doTakeOff := true
 
 	// TODO: Maybe put takeoff here
+	//drone.TakeOff()
+	//drone.Up(30)
+	//SleepSeconds(2)
 
 	for {
 
@@ -326,7 +330,12 @@ func main() {
 			fmt.Println(err)
 			continue
 		}
-		img, _ := gocv.NewMatFromBytes(frameX, frameY, gocv.MatTypeCV8UC3, buf)
+
+		img, err1 := gocv.NewMatFromBytes(frameX, frameY, gocv.MatTypeCV8UC3, buf)
+		if err1 != nil {
+			log.Print(err1)
+			continue
+		}
 		if img.Empty() {
 			continue
 		}
@@ -340,7 +349,6 @@ func main() {
 
 		window.IMShow(img)
 		if window.WaitKey(10) >= 0 {
-			println("Land the robot...")
 			break
 		}
 	}
