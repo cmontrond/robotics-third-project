@@ -43,10 +43,11 @@ var (
 	green      = color.RGBA{G: 255}
 
 	// tracking
-	tracking                 = true
-	detected                 = false
-	detectSize               = true
-	distTolerance            = 0.05 * dist(0, 0, frameX, frameY)
+	tracking   = true
+	detected   = false
+	detectSize = true
+	//distTolerance            = 0.05 * dist(0, 0, frameX, frameY)
+	distTolerance            = 0.05 * dist(0, 0, 120, 90) // TODO: Change things here, maybe to 0.10
 	refDistance              float64
 	left, top, right, bottom float64
 
@@ -68,13 +69,13 @@ func init() {
 			return
 		}
 
-		if err := drone.On(tello.FlightDataEvent, func(data interface{}) {
-			// TODO: protect flight data from race condition
-			flightData = data.(*tello.FlightData)
-			//println("Battery: ", flightData.BatteryPercentage)
-		}); err != nil {
-			println("Error in FlightDataEvent: ", err)
-		}
+		//if err := drone.On(tello.FlightDataEvent, func(data interface{}) {
+		//	// TODO: protect flight data from race condition
+		//	flightData = data.(*tello.FlightData)
+		//	//println("Battery: ", flightData.BatteryPercentage)
+		//}); err != nil {
+		//	println("Error in FlightDataEvent: ", err)
+		//}
 
 		if err := drone.On(tello.ConnectedEvent, func(data interface{}) {
 			fmt.Println("Connected")
@@ -166,9 +167,9 @@ func trackFace(frame *gocv.Mat) {
 			}
 		}
 
-		fmt.Printf("Face Rectangle: ", faces[max])
+		//fmt.Printf("Face Rectangle: ", faces[max])
 
-		//gocv.Rectangle(frame, faces[max], green, 3)
+		gocv.Rectangle(frame, faces[max], green, 3)
 	}
 
 	if detectSize {
@@ -207,14 +208,19 @@ func trackFace(frame *gocv.Mat) {
 	// z axis
 	switch {
 	case distance < refDistance-distTolerance:
-		//drone.Forward(80)
+		//drone.Forward(20)
 		println("Drone should move forward...")
+		//SleepSeconds(2)
 	case distance > refDistance+distTolerance:
-		//drone.Backward(80)
+		drone.Backward(20)
 		println("Drone should move backward...")
+		//SleepSeconds(2)
 	default:
-		//drone.Forward(0)
+		drone.Forward(0)
+		drone.Backward(0)
 		println("Drone should not move forward...")
+		// TODO: Maybe turn around when you can't find a face
+		//SleepSeconds(2)
 	}
 
 	// TODO: Do this only if the drone is at a safe enough distance
@@ -306,7 +312,7 @@ func main() {
 	classifier = &cascadeClassifier
 	defer classifier.Close()
 
-	//doTakeOff := true
+	doTakeOff := true
 
 	// TODO: Maybe put takeoff here
 	//drone.TakeOff()
@@ -315,14 +321,12 @@ func main() {
 
 	for {
 
-		//if doTakeOff {
-		//	drone.TakeOff()
-		//	//drone.Up(30)
-		//	//SleepSeconds(2)
-		//	doTakeOff = false
-		//} else {
-		//	drone.Hover()
-		//}
+		if doTakeOff {
+			drone.TakeOff()
+			//drone.Up(30)
+			//SleepSeconds(2)
+			doTakeOff = false
+		}
 
 		// get next frame from stream
 		buf := make([]byte, frameSize)
@@ -340,12 +344,12 @@ func main() {
 			continue
 		}
 
-		resizedImg := ResizeImage(img, image.Point{
+		img = ResizeImage(img, image.Point{
 			X: 120,
 			Y: 90,
 		})
 
-		trackFace(&resizedImg)
+		trackFace(&img)
 
 		window.IMShow(img)
 		if window.WaitKey(10) >= 0 {
