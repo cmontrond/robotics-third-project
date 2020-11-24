@@ -21,8 +21,8 @@ type pair struct {
 }
 
 const (
-	frameX    = 400
-	frameY    = 300
+	frameX    = 720
+	frameY    = 960
 	frameSize = frameX * frameY * 3
 )
 
@@ -33,6 +33,9 @@ var (
 
 	ffmpeg = exec.Command("ffmpeg", "-i", "pipe:0", "-pix_fmt", "bgr24", "-vcodec", "rawvideo",
 		"-an", "-sn", "-s", strconv.Itoa(frameY)+"x"+strconv.Itoa(frameX), "-f", "rawvideo", "pipe:1")
+
+	//ffmpeg = exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
+	//	"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameX)+"x"+strconv.Itoa(frameY), "-f", "rawvideo", "pipe:1")
 
 	ffmpegIn, _  = ffmpeg.StdinPipe()
 	ffmpegOut, _ = ffmpeg.StdoutPipe()
@@ -91,7 +94,7 @@ func init() {
 				println("Error in SetExposure: ", err)
 			}
 
-			gobot.Every(400*time.Millisecond, func() {
+			gobot.Every(100*time.Millisecond, func() {
 				if err := drone.StartVideo(); err != nil {
 					println("Error in StartVideo: ", err)
 				}
@@ -169,9 +172,9 @@ func trackFace(frame *gocv.Mat) {
 
 		//fmt.Printf("Face Rectangle: ", faces[max])
 
-		//gocv.Rectangle(frame, faces[max], green, 3)
+		gocv.Rectangle(frame, faces[max], green, 3)
 
-		println("Found a face!")
+		//println("Found a face!")
 
 		left = float64(faces[max].Min.X)
 		top = float64(faces[max].Max.Y)
@@ -358,12 +361,13 @@ func main() {
 			continue
 		}
 
-		resizedFrame := resizeFrame(img, image.Point{
+		img = resizeFrame(img, image.Point{
 			X: 120,
 			Y: 90,
 		})
 
-		trackFace(&resizedFrame)
+		trackFace(&img)
+		//handleGestures(&img)
 
 		window.IMShow(img)
 		if window.WaitKey(10) >= 0 {
