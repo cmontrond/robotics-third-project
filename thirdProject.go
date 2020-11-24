@@ -50,7 +50,7 @@ var (
 	detected   = false
 	detectSize = true
 	//distTolerance            = 0.05 * dist(0, 0, frameX, frameY)
-	distTolerance            = 0.05 * dist(0, 0, 120, 90) // TODO: Change things here, maybe to 0.10
+	distTolerance            = 0.001 * dist(0, 0, 120, 90) // TODO: Change things here, maybe to 0.10
 	refDistance              float64
 	left, top, right, bottom float64
 
@@ -222,19 +222,17 @@ func trackFace(frame *gocv.Mat) {
 		// z axis
 		switch {
 		case distance < refDistance-distTolerance:
-			//drone.Forward(20)
+			drone.Forward(20)
 			println("Drone should move forward...")
-			SleepSeconds(2)
-		//case distance > refDistance+distTolerance:
-		//	//drone.Backward(20)
-		//	println("Drone should move backward...")
-		//	//SleepSeconds(2)
+			//SleepSeconds(2)
+			break
 		default:
-			//drone.Forward(0)
+			drone.Forward(0)
 			//drone.Backward(0)
 			println("Drone should not move forward...")
 			// TODO: Maybe turn around when you can't find a face
 			//SleepSeconds(2)
+			break
 		}
 
 		// TODO: Do this only if the drone is at a safe enough distance
@@ -334,7 +332,7 @@ func main() {
 	classifier = &cascadeClassifier
 	defer classifier.Close()
 
-	doTakeOff := false
+	doTakeOff := true
 
 	for {
 
