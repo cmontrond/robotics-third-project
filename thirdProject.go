@@ -283,6 +283,13 @@ func handleGestures(img *gocv.Mat) {
 	//gocv.Rectangle(img, rect, color.RGBA{R: 255, G: 255, B: 255}, 2)
 
 	gocv.PutText(img, status, image.Pt(10, 20), gocv.FontHersheyPlain, 1.2, green, 2)
+
+	switch {
+	case (defectCount + 1) == 3:
+		// TODO: Make drone do something, like go back or forward, or do a back flip
+	case (defectCount + 1) == 1:
+		// TODO: Make drone do something else
+	}
 }
 
 func getBiggestContour(contours [][]image.Point) []image.Point {
@@ -314,17 +321,12 @@ func main() {
 
 	doTakeOff := true
 
-	// TODO: Maybe put takeoff here
-	//drone.TakeOff()
-	//drone.Up(30)
-	//SleepSeconds(2)
-
 	for {
 
 		if doTakeOff {
-			drone.TakeOff()
-			//drone.Up(30)
-			//SleepSeconds(2)
+			if err := drone.TakeOff(); err != nil {
+				println("Error in TakeOff: ", err)
+			}
 			doTakeOff = false
 		}
 

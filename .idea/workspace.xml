@@ -310,14 +310,20 @@
       <option name="project" value="LOCAL" />
       <updated>1606163713650</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="made drone go backward after seeing face">
+      <created>1606187547591</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1606187547591</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update readme file" />
     <MESSAGE value="fix typos in readme file" />
     <MESSAGE value="create tello lib" />
     <MESSAGE value="create utils file with helper functions" />
@@ -342,17 +348,18 @@
     <MESSAGE value="add movement on different axis" />
     <MESSAGE value="fix readme" />
     <MESSAGE value="fix error" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix error" />
+    <MESSAGE value="made drone go backward after seeing face" />
+    <option name="LAST_COMMIT_MESSAGE" value="made drone go backward after seeing face" />
   </component>
   <component name="WindowStateProjectService">
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604510609775">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1604510609775" />
-    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2" timestamp="1606163713232">
+    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2" timestamp="1606187547104">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605479774538" />
+    <state x="381" y="0" width="775" height="824" key="CommitChangelistDialog2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606187547104" />
     <state x="381" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1606163713232" />
     <state width="427" height="466" key="DebuggerActiveHint" timestamp="1605234377939">
       <screen x="0" y="0" width="1536" height="824" />
@@ -410,10 +417,10 @@
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605235452652" />
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1603905843001" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1606163715421">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1606187548989">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1605235253963" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824/1920.-360.2560.1400@0.0.1536.824" timestamp="1606187548989" />
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1606163715421" />
     <state x="2177" y="-157" width="1277" height="811" key="dock-window-1" timestamp="1604456327059">
       <screen x="1920" y="-360" width="2560" height="1400" />
