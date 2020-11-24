@@ -21,8 +21,8 @@ type pair struct {
 }
 
 const (
-	frameX    = 720
-	frameY    = 960
+	frameX    = 400
+	frameY    = 300
 	frameSize = frameX * frameY * 3
 )
 
@@ -169,62 +169,74 @@ func trackFace(frame *gocv.Mat) {
 
 		//fmt.Printf("Face Rectangle: ", faces[max])
 
-		gocv.Rectangle(frame, faces[max], green, 3)
+		//gocv.Rectangle(frame, faces[max], green, 3)
+
+		println("Found a face!")
+
+		left = float64(faces[max].Min.X)
+		top = float64(faces[max].Max.Y)
+		right = float64(faces[max].Max.X)
+		bottom = float64(faces[max].Min.Y)
+
+		left = math.Min(math.Max(0.0, left), W-1.0)
+		right = math.Min(math.Max(0.0, right), W-1.0)
+		bottom = math.Min(math.Max(0.0, bottom), H-1.0)
+		top = math.Min(math.Max(0.0, top), H-1.0)
+
+		if detectSize {
+			detectSize = false
+			refDistance = dist(left, top, right, bottom)
+		}
+
+		distance := dist(left, top, right, bottom)
+
+		// x axis
+		//switch {
+		//case right < W/2:
+		//	//drone.CounterClockwise(50)
+		//	println("Drone moving counter clockwise...")
+		//case left > W/2:
+		//	//drone.Clockwise(50)
+		//	println("Drone moving clockwise")
+		//default:
+		//	//drone.Clockwise(0)
+		//	println("Drone not moving clockwise")
+		//}
+
+		// y axis
+		//switch {
+		//case top < H/10:
+		//	//drone.Up(25)
+		//	println("Drone moving up...")
+		//case bottom > H-H/10:
+		//	//drone.Down(25)
+		//	println("Drone moving Down...")
+		//default:
+		//	//drone.Up(0)
+		//	println("Drone not moving up or down...")
+		//}
+
+		// z axis
+		switch {
+		case distance < refDistance-distTolerance:
+			//drone.Forward(20)
+			println("Drone should move forward...")
+			SleepSeconds(2)
+		//case distance > refDistance+distTolerance:
+		//	//drone.Backward(20)
+		//	println("Drone should move backward...")
+		//	//SleepSeconds(2)
+		default:
+			//drone.Forward(0)
+			//drone.Backward(0)
+			println("Drone should not move forward...")
+			// TODO: Maybe turn around when you can't find a face
+			//SleepSeconds(2)
+		}
+
+		// TODO: Do this only if the drone is at a safe enough distance
+		//handleGestures(frame)
 	}
-
-	if detectSize {
-		detectSize = false
-		refDistance = dist(left, top, right, bottom)
-	}
-
-	distance := dist(left, top, right, bottom)
-
-	// x axis
-	//switch {
-	//case right < W/2:
-	//	//drone.CounterClockwise(50)
-	//	println("Drone moving counter clockwise...")
-	//case left > W/2:
-	//	//drone.Clockwise(50)
-	//	println("Drone moving clockwise")
-	//default:
-	//	//drone.Clockwise(0)
-	//	println("Drone not moving clockwise")
-	//}
-
-	// y axis
-	//switch {
-	//case top < H/10:
-	//	//drone.Up(25)
-	//	println("Drone moving up...")
-	//case bottom > H-H/10:
-	//	//drone.Down(25)
-	//	println("Drone moving Down...")
-	//default:
-	//	//drone.Up(0)
-	//	println("Drone not moving up or down...")
-	//}
-
-	// z axis
-	switch {
-	case distance < refDistance-distTolerance:
-		//drone.Forward(20)
-		println("Drone should move forward...")
-		//SleepSeconds(2)
-	case distance > refDistance+distTolerance:
-		drone.Backward(20)
-		println("Drone should move backward...")
-		//SleepSeconds(2)
-	default:
-		drone.Forward(0)
-		drone.Backward(0)
-		println("Drone should not move forward...")
-		// TODO: Maybe turn around when you can't find a face
-		//SleepSeconds(2)
-	}
-
-	// TODO: Do this only if the drone is at a safe enough distance
-	//handleGestures(frame)
 }
 
 func handleGestures(img *gocv.Mat) {
@@ -305,10 +317,10 @@ func getBiggestContour(contours [][]image.Point) []image.Point {
 	return contours[index]
 }
 
-func ResizeImage(cameraMedia gocv.Mat, newSize image.Point) gocv.Mat {
-	destinationImage := gocv.NewMatWithSize(newSize.X, newSize.Y, gocv.MatTypeCV8UC3)
-	gocv.Resize(cameraMedia, &destinationImage, image.Pt(newSize.X, newSize.Y), 0, 0, gocv.InterpolationNearestNeighbor)
-	return destinationImage
+func resizeFrame(frame gocv.Mat, targetSize image.Point) gocv.Mat {
+	result := gocv.NewMatWithSize(targetSize.X, targetSize.Y, gocv.MatTypeCV8UC3)
+	gocv.Resize(frame, &result, image.Pt(targetSize.X, targetSize.Y), 0, 0, gocv.InterpolationNearestNeighbor)
+	return result
 }
 
 func main() {
@@ -319,7 +331,7 @@ func main() {
 	classifier = &cascadeClassifier
 	defer classifier.Close()
 
-	doTakeOff := true
+	doTakeOff := false
 
 	for {
 
@@ -346,12 +358,12 @@ func main() {
 			continue
 		}
 
-		img = ResizeImage(img, image.Point{
+		resizedFrame := resizeFrame(img, image.Point{
 			X: 120,
 			Y: 90,
 		})
 
-		trackFace(&img)
+		trackFace(&resizedFrame)
 
 		window.IMShow(img)
 		if window.WaitKey(10) >= 0 {
