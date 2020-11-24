@@ -11,7 +11,6 @@ import (
 	"log"
 	"math"
 	"os/exec"
-	"strconv"
 	"time"
 )
 
@@ -31,14 +30,18 @@ var (
 	//ffmpeg = exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
 	//	"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameY)+"x"+strconv.Itoa(frameX), "-f", "rawvideo", "pipe:1")
 
-	ffmpeg = exec.Command("ffmpeg", "-i", "pipe:0", "-pix_fmt", "bgr24", "-vcodec", "rawvideo",
-		"-an", "-sn", "-s", strconv.Itoa(frameY)+"x"+strconv.Itoa(frameX), "-f", "rawvideo", "pipe:1")
+	//ffmpeg = exec.Command("ffmpeg", "-i", "pipe:0", "-pix_fmt", "bgr24", "-vcodec", "rawvideo",
+	//	"-an", "-sn", "-s", strconv.Itoa(frameY)+"x"+strconv.Itoa(frameX), "-f", "rawvideo", "pipe:1")
 
 	//ffmpeg = exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
 	//	"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameX)+"x"+strconv.Itoa(frameY), "-f", "rawvideo", "pipe:1")
 
-	ffmpegIn, _  = ffmpeg.StdinPipe()
-	ffmpegOut, _ = ffmpeg.StdoutPipe()
+	//ffmpegIn, _  = ffmpeg.StdinPipe()
+	//ffmpegOut, _ = ffmpeg.StdoutPipe()
+
+	mplayer       = exec.Command("mplayer", "-fps", "60", "-")
+	mplayerIn, _  = mplayer.StdinPipe()
+	mplayerOut, _ = mplayer.StdoutPipe()
 
 	// gocv
 	window     = gocv.NewWindow("Tello")
@@ -67,7 +70,7 @@ func init() {
 	// process drone events in separate goroutine for concurrency
 	go func() {
 
-		if err := ffmpeg.Start(); err != nil {
+		if err := mplayer.Start(); err != nil {
 			fmt.Println(err)
 			return
 		}
@@ -105,7 +108,7 @@ func init() {
 
 		if err := drone.On(tello.VideoFrameEvent, func(data interface{}) {
 			pkt := data.([]byte)
-			if _, err := ffmpegIn.Write(pkt); err != nil {
+			if _, err := mplayerIn.Write(pkt); err != nil {
 				fmt.Println(err)
 			}
 		}); err != nil {
@@ -347,7 +350,7 @@ func main() {
 
 		// get next frame from stream
 		buf := make([]byte, frameSize)
-		if _, err := io.ReadFull(ffmpegOut, buf); err != nil {
+		if _, err := io.ReadFull(mplayerOut, buf); err != nil {
 			fmt.Println(err)
 			continue
 		}
@@ -361,10 +364,10 @@ func main() {
 			continue
 		}
 
-		img = resizeFrame(img, image.Point{
-			X: 120,
-			Y: 90,
-		})
+		//img = resizeFrame(img, image.Point{
+		//	X: 120,
+		//	Y: 90,
+		//})
 
 		trackFace(&img)
 		//handleGestures(&img)
