@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/dji/tello"
+	"gobot.io/x/gobot/platforms/keyboard"
 	"gocv.io/x/gocv"
 	"image"
 	"image/color"
@@ -15,11 +16,6 @@ import (
 	"time"
 )
 
-type pair struct {
-	x float64
-	y float64
-}
-
 const (
 	frameX    = 720
 	frameY    = 960
@@ -27,15 +23,9 @@ const (
 )
 
 var (
-	// ffmpeg command to decode video stream from drone
-	//ffmpeg = exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
-	//	"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameY)+"x"+strconv.Itoa(frameX), "-f", "rawvideo", "pipe:1")
-
+	// ffmpeg command
 	ffmpeg = exec.Command("ffmpeg", "-i", "pipe:0", "-pix_fmt", "bgr24", "-vcodec", "rawvideo",
 		"-an", "-sn", "-s", strconv.Itoa(frameY)+"x"+strconv.Itoa(frameX), "-f", "rawvideo", "pipe:1")
-
-	//ffmpeg = exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
-	//	"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameX)+"x"+strconv.Itoa(frameY), "-f", "rawvideo", "pipe:1")
 
 	ffmpegIn, _  = ffmpeg.StdinPipe()
 	ffmpegOut, _ = ffmpeg.StdoutPipe()
@@ -46,17 +36,19 @@ var (
 	green      = color.RGBA{G: 255}
 
 	// tracking
-	tracking   = true
-	detected   = false
-	detectSize = true
-	//distTolerance            = 0.05 * dist(0, 0, frameX, frameY)
-	distTolerance            = 0.001 * dist(0, 0, 120, 90) // TODO: Change things here, maybe to 0.10
+	tracking                 = true
+	detected                 = false
+	detectSize               = true
+	distTolerance            = 0.001 * dist(0, 0, 120, 90)
 	refDistance              float64
 	left, top, right, bottom float64
 
 	// drone
 	drone      = tello.NewDriver("8890")
 	flightData *tello.FlightData
+
+	// keyboard
+	keys = keyboard.NewDriver()
 )
 
 func dist(x1, y1, x2, y2 float64) float64 {
@@ -64,7 +56,7 @@ func dist(x1, y1, x2, y2 float64) float64 {
 }
 
 func init() {
-	// process drone events in separate goroutine for concurrency
+	// drone events
 	go func() {
 
 		if err := ffmpeg.Start(); err != nil {
@@ -73,9 +65,8 @@ func init() {
 		}
 
 		//if err := drone.On(tello.FlightDataEvent, func(data interface{}) {
-		//	// TODO: protect flight data from race condition
 		//	flightData = data.(*tello.FlightData)
-		//	//println("Battery: ", flightData.BatteryPercentage)
+		//	println("Battery: ", flightData.BatteryPercentage)
 		//}); err != nil {
 		//	println("Error in FlightDataEvent: ", err)
 		//}
@@ -112,9 +103,23 @@ func init() {
 			println("Error in VideFrameEvent: ", err)
 		}
 
+		if err := keys.On(keyboard.Key, func(data interface{}) {
+			key := data.(keyboard.KeyEvent)
+
+			if key.Key == keyboard.Q {
+				println("Landing the drone...")
+				if err := drone.Land(); err != nil {
+					println("Error in landing the drone: ", err)
+				}
+
+			}
+		}); err != nil {
+			println("Error in Keyboard Press: ", err)
+		}
+
 		robot := gobot.NewRobot("Project 3 - Drone",
 			[]gobot.Connection{},
-			[]gobot.Device{drone},
+			[]gobot.Device{drone, keys},
 		)
 
 		if err := robot.Start(false); err != nil {
@@ -170,11 +175,7 @@ func trackFace(frame *gocv.Mat) {
 			}
 		}
 
-		//fmt.Printf("Face Rectangle: ", faces[max])
-
 		gocv.Rectangle(frame, faces[max], green, 3)
-
-		//println("Found a face!")
 
 		left = float64(faces[max].Min.X)
 		top = float64(faces[max].Max.Y)
@@ -193,50 +194,17 @@ func trackFace(frame *gocv.Mat) {
 
 		distance := dist(left, top, right, bottom)
 
-		// x axis
-		//switch {
-		//case right < W/2:
-		//	//drone.CounterClockwise(50)
-		//	println("Drone moving counter clockwise...")
-		//case left > W/2:
-		//	//drone.Clockwise(50)
-		//	println("Drone moving clockwise")
-		//default:
-		//	//drone.Clockwise(0)
-		//	println("Drone not moving clockwise")
-		//}
-
-		// y axis
-		//switch {
-		//case top < H/10:
-		//	//drone.Up(25)
-		//	println("Drone moving up...")
-		//case bottom > H-H/10:
-		//	//drone.Down(25)
-		//	println("Drone moving Down...")
-		//default:
-		//	//drone.Up(0)
-		//	println("Drone not moving up or down...")
-		//}
-
-		// z axis
+		// Follow a face
 		switch {
 		case distance < refDistance-distTolerance:
 			drone.Forward(20)
 			println("Drone should move forward...")
-			//SleepSeconds(2)
 			break
 		default:
 			drone.Forward(0)
-			//drone.Backward(0)
 			println("Drone should not move forward...")
-			// TODO: Maybe turn around when you can't find a face
-			//SleepSeconds(2)
 			break
 		}
-
-		// TODO: Do this only if the drone is at a safe enough distance
-		//handleGestures(frame)
 	}
 }
 
@@ -359,6 +327,7 @@ func main() {
 			continue
 		}
 
+		// Resize the image to increase performance
 		img = resizeFrame(img, image.Point{
 			X: 120,
 			Y: 90,
