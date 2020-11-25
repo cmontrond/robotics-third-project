@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/dji/tello"
-	"gobot.io/x/gobot/platforms/keyboard"
 	"gocv.io/x/gocv"
 	"image"
 	"image/color"
@@ -46,9 +45,6 @@ var (
 	// drone
 	drone      = tello.NewDriver("8890")
 	flightData *tello.FlightData
-
-	// keyboard
-	keys = keyboard.NewDriver()
 )
 
 func dist(x1, y1, x2, y2 float64) float64 {
@@ -103,23 +99,24 @@ func init() {
 			println("Error in VideFrameEvent: ", err)
 		}
 
-		if err := keys.On(keyboard.Key, func(data interface{}) {
-			key := data.(keyboard.KeyEvent)
-
-			if key.Key == keyboard.Q {
-				println("Landing the drone...")
-				if err := drone.Land(); err != nil {
-					println("Error in landing the drone: ", err)
-				}
-
-			}
-		}); err != nil {
-			println("Error in Keyboard Press: ", err)
-		}
+		//if err := keys.On(keyboard.Key, func(data interface{}) {
+		//	key := data.(keyboard.KeyEvent)
+		//
+		//	if key.Key == keyboard.Q {
+		//		println("Landing the drone...")
+		//		if err := drone.Land(); err != nil {
+		//			println("Error in landing the drone: ", err)
+		//		}
+		//
+		//	}
+		//}); err != nil {
+		//	println("Error in Keyboard Press: ", err)
+		//}
 
 		robot := gobot.NewRobot("Project 3 - Drone",
 			[]gobot.Connection{},
-			[]gobot.Device{drone, keys},
+			[]gobot.Device{drone},
+			//[]gobot.Device{drone, keys},
 		)
 
 		if err := robot.Start(false); err != nil {
@@ -193,6 +190,9 @@ func trackFace(frame *gocv.Mat) {
 		}
 
 		distance := dist(left, top, right, bottom)
+
+		//println("Distance: ", distance)
+		//println("refDistance-distTolerance: ", refDistance-distTolerance)
 
 		// Follow a face
 		switch {
@@ -334,7 +334,8 @@ func main() {
 		})
 
 		trackFace(&img)
-		//handleGestures(&img)
+
+		handleGestures(&img)
 
 		window.IMShow(img)
 		if window.WaitKey(10) >= 0 {
