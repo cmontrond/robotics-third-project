@@ -245,7 +245,7 @@ func handleGestures(img *gocv.Mat) {
 	gocv.ConvexityDefects(c, hull, &defects)
 
 	var angle float64
-	defectCount := 0
+	numberOfFingers := 0
 	for i := 0; i < defects.Rows(); i++ {
 		start := c[defects.GetIntAt(i, 0)]
 		end := c[defects.GetIntAt(i, 1)]
@@ -258,12 +258,12 @@ func handleGestures(img *gocv.Mat) {
 		angle = math.Acos((math.Pow(b, 2)+math.Pow(c, 2)-math.Pow(a, 2))/(2*b*c)) * 57
 
 		if angle <= 90 {
-			defectCount++
+			numberOfFingers++
 			gocv.Circle(img, far, 1, green, 2)
 		}
 	}
 
-	status := fmt.Sprintf("defectCount: %d", defectCount+1)
+	status := fmt.Sprintf("numberOfFingers: %d", numberOfFingers+1)
 
 	rect := gocv.BoundingRect(c)
 	gocv.Rectangle(img, rect, color.RGBA{R: 255, G: 255, B: 255}, 2)
@@ -271,12 +271,12 @@ func handleGestures(img *gocv.Mat) {
 	gocv.PutText(img, status, image.Pt(10, 20), gocv.FontHersheyPlain, 1.2, green, 2)
 
 	switch {
-	case (defectCount + 1) == 3:
+	case (numberOfFingers + 1) == 3:
 		// Make drone do a back flip
 		if err := drone.BackFlip(); err != nil {
 			println("Error making the drone perform a back flip...")
 		}
-	case (defectCount + 1) == 1:
+	case (numberOfFingers + 1) == 1:
 		drone.Hover()
 	}
 }
