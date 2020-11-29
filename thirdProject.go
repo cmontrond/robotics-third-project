@@ -35,11 +35,11 @@ var (
 	green      = color.RGBA{G: 255}
 
 	// tracking
-	tracking                 = true
-	detected                 = false
-	detectSize               = true
-	distTolerance            = 0.001 * dist(0, 0, 120, 90)
-	refDistance              float64
+	trackingEnabled          = true
+	faceDetected             = false
+	shouldDetectSize         = true
+	distanceTolerance        = 0.001 * dist(0, 0, 120, 90)
+	referenceDistance        float64
 	left, top, right, bottom float64
 
 	// drone
@@ -60,12 +60,12 @@ func init() {
 			return
 		}
 
-		//if err := drone.On(tello.FlightDataEvent, func(data interface{}) {
-		//	flightData = data.(*tello.FlightData)
-		//	println("Battery: ", flightData.BatteryPercentage)
-		//}); err != nil {
-		//	println("Error in FlightDataEvent: ", err)
-		//}
+		if err := drone.On(tello.FlightDataEvent, func(data interface{}) {
+			flightData = data.(*tello.FlightData)
+			println("Battery: ", flightData.BatteryPercentage)
+		}); err != nil {
+			println("Error in FlightDataEvent: ", err)
+		}
 
 		if err := drone.On(tello.ConnectedEvent, func(data interface{}) {
 			fmt.Println("Connected")
@@ -99,24 +99,9 @@ func init() {
 			println("Error in VideFrameEvent: ", err)
 		}
 
-		//if err := keys.On(keyboard.Key, func(data interface{}) {
-		//	key := data.(keyboard.KeyEvent)
-		//
-		//	if key.Key == keyboard.Q {
-		//		println("Landing the drone...")
-		//		if err := drone.Land(); err != nil {
-		//			println("Error in landing the drone: ", err)
-		//		}
-		//
-		//	}
-		//}); err != nil {
-		//	println("Error in Keyboard Press: ", err)
-		//}
-
 		robot := gobot.NewRobot("Project 3 - Drone",
 			[]gobot.Connection{},
 			[]gobot.Device{drone},
-			//[]gobot.Device{drone, keys},
 		)
 
 		if err := robot.Start(false); err != nil {
@@ -125,9 +110,9 @@ func init() {
 	}()
 }
 
-func trackFace(frame *gocv.Mat) {
-	W := float64(frame.Cols())
-	H := float64(frame.Rows())
+func handleTrackFace(frame *gocv.Mat) {
+	frameWidth := float64(frame.Cols())
+	frameHeight := float64(frame.Rows())
 
 	imageRectangles := classifier.DetectMultiScale(*frame)
 
@@ -144,22 +129,22 @@ func trackFace(frame *gocv.Mat) {
 		right = float64(rect.Max.X)
 		bottom = float64(rect.Min.Y)
 
-		left = math.Min(math.Max(0.0, left), W-1.0)
-		right = math.Min(math.Max(0.0, right), W-1.0)
-		bottom = math.Min(math.Max(0.0, bottom), H-1.0)
-		top = math.Min(math.Max(0.0, top), H-1.0)
+		left = math.Min(math.Max(0.0, left), frameWidth-1.0)
+		right = math.Min(math.Max(0.0, right), frameWidth-1.0)
+		bottom = math.Min(math.Max(0.0, bottom), frameHeight-1.0)
+		top = math.Min(math.Max(0.0, top), frameHeight-1.0)
 
 		w := right - left
 		h := top - bottom
 
 		area := w * h
 
-		detected = true
+		faceDetected = true
 
 		faces[area] = rect
 	}
 
-	if !detected {
+	if !faceDetected {
 		return
 	}
 
@@ -179,64 +164,57 @@ func trackFace(frame *gocv.Mat) {
 		right = float64(faces[max].Max.X)
 		bottom = float64(faces[max].Min.Y)
 
-		left = math.Min(math.Max(0.0, left), W-1.0)
-		right = math.Min(math.Max(0.0, right), W-1.0)
-		bottom = math.Min(math.Max(0.0, bottom), H-1.0)
-		top = math.Min(math.Max(0.0, top), H-1.0)
+		left = math.Min(math.Max(0.0, left), frameWidth-1.0)
+		right = math.Min(math.Max(0.0, right), frameWidth-1.0)
+		bottom = math.Min(math.Max(0.0, bottom), frameHeight-1.0)
+		top = math.Min(math.Max(0.0, top), frameHeight-1.0)
 
-		if detectSize {
-			detectSize = false
-			refDistance = dist(left, top, right, bottom)
+		if shouldDetectSize {
+			shouldDetectSize = false
+			referenceDistance = dist(left, top, right, bottom)
 		}
 
-		//distance := dist(left, top, right, bottom)
+		distance := dist(left, top, right, bottom)
 
-		//println("Distance: ", distance)
-		//println("refDistance-distTolerance: ", refDistance-distTolerance)
-
-		// x axis
-		//switch {
-		//case right < W/2:
-		//	//drone.CounterClockwise(20)
-		//	drone.Left(15)
-		//	println("Drone should go left...")
-		//case left > W/2:
-		//	//drone.Clockwise(20)
-		//	drone.Right(15)
-		//	println("Drone should go right...")
-		//default:
-		//	drone.Left(0)
-		//	drone.Right(0)
-		//	//drone.Clockwise(0)
-		//}
-
-		// y axis
+		// right and left
 		switch {
-		case top < H/10:
-			//drone.Up(25)
+		case right < frameWidth/2:
+			//drone.CounterClockwise(20)
+			drone.Left(15)
+			println("Drone should go left...")
+		case left > frameWidth/2:
+			//drone.Clockwise(20)
+			drone.Right(15)
+			println("Drone should go right...")
+		default:
+			drone.Left(0)
+			drone.Right(0)
+			//drone.Clockwise(0)
+		}
+
+		// up and down
+		switch {
+		case top < frameHeight/10:
+			drone.Up(25)
 			println("Drone should go up...")
-		case bottom > H-H/10:
-			//drone.Down(25)
+		case bottom > frameHeight-frameHeight/10:
+			drone.Down(25)
 			println("Drone should go down...")
 		default:
-			//drone.Up(0)
-			//drone.Down(0)
+			drone.Up(0)
+			drone.Down(0)
 		}
 
-		// Follow a face
-		//switch {
-		//case distance < refDistance-distTolerance:
-		//	drone.Forward(20)
-		//	println("Drone should move forward...")
-		//	break
-		//default:
-		//	drone.Forward(0)
-		//	println("Drone should not move forward...")
-		//	break
-		//}
+		// forward
+		switch {
+		case distance < referenceDistance-distanceTolerance:
+			drone.Forward(20)
+			println("Drone should move forward...")
+		default:
+			drone.Forward(0)
+			println("Drone should not move forward...")
+		}
 	}
-
-	//drone.Clockwise(0)
 }
 
 func handleGestures(img *gocv.Mat) {
@@ -256,12 +234,10 @@ func handleGestures(img *gocv.Mat) {
 	defects := gocv.NewMat()
 	defer defects.Close()
 
-	// cleaning up image
 	gocv.CvtColor(*img, &imgGrey, gocv.ColorBGRToGray)
 	gocv.GaussianBlur(imgGrey, &imgBlur, image.Pt(35, 35), 0, 0, gocv.BorderDefault)
 	gocv.Threshold(imgBlur, &imgThresh, 0, 255, gocv.ThresholdBinaryInv+gocv.ThresholdOtsu)
 
-	// now find biggest contour
 	contours := gocv.FindContours(imgThresh, gocv.RetrievalExternal, gocv.ChainApproxSimple)
 	c := getBiggestContour(contours)
 
@@ -279,10 +255,8 @@ func handleGestures(img *gocv.Mat) {
 		b := math.Sqrt(math.Pow(float64(far.X-start.X), 2) + math.Pow(float64(far.Y-start.Y), 2))
 		c := math.Sqrt(math.Pow(float64(end.X-far.X), 2) + math.Pow(float64(end.Y-far.Y), 2))
 
-		// apply cosine rule here
 		angle = math.Acos((math.Pow(b, 2)+math.Pow(c, 2)-math.Pow(a, 2))/(2*b*c)) * 57
 
-		// ignore angles > 90 and highlight rest with dots
 		if angle <= 90 {
 			defectCount++
 			gocv.Circle(img, far, 1, green, 2)
@@ -291,16 +265,19 @@ func handleGestures(img *gocv.Mat) {
 
 	status := fmt.Sprintf("defectCount: %d", defectCount+1)
 
-	//rect := gocv.BoundingRect(c)
-	//gocv.Rectangle(img, rect, color.RGBA{R: 255, G: 255, B: 255}, 2)
+	rect := gocv.BoundingRect(c)
+	gocv.Rectangle(img, rect, color.RGBA{R: 255, G: 255, B: 255}, 2)
 
 	gocv.PutText(img, status, image.Pt(10, 20), gocv.FontHersheyPlain, 1.2, green, 2)
 
 	switch {
 	case (defectCount + 1) == 3:
-		// TODO: Make drone do something, like go back or forward, or do a back flip
+		// Make drone do a back flip
+		if err := drone.BackFlip(); err != nil {
+			println("Error making the drone perform a back flip...")
+		}
 	case (defectCount + 1) == 1:
-		// TODO: Make drone do something else
+		drone.Hover()
 	}
 }
 
@@ -364,7 +341,7 @@ func main() {
 			Y: 90,
 		})
 
-		trackFace(&img)
+		handleTrackFace(&img)
 
 		//handleGestures(&img)
 
