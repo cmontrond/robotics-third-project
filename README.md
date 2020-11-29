@@ -24,7 +24,6 @@ and testing purposes.
 ### Prerequisites
 
 * DJI Tello Drone
-* Have MPlayer Installed
 * Have ffmpeg Installed
 * Have Go Installed
 * Have Gobot Installed

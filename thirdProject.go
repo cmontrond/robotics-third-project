@@ -189,23 +189,54 @@ func trackFace(frame *gocv.Mat) {
 			refDistance = dist(left, top, right, bottom)
 		}
 
-		distance := dist(left, top, right, bottom)
+		//distance := dist(left, top, right, bottom)
 
 		//println("Distance: ", distance)
 		//println("refDistance-distTolerance: ", refDistance-distTolerance)
 
-		// Follow a face
+		// x axis
+		//switch {
+		//case right < W/2:
+		//	//drone.CounterClockwise(20)
+		//	drone.Left(15)
+		//	println("Drone should go left...")
+		//case left > W/2:
+		//	//drone.Clockwise(20)
+		//	drone.Right(15)
+		//	println("Drone should go right...")
+		//default:
+		//	drone.Left(0)
+		//	drone.Right(0)
+		//	//drone.Clockwise(0)
+		//}
+
+		// y axis
 		switch {
-		case distance < refDistance-distTolerance:
-			drone.Forward(20)
-			println("Drone should move forward...")
-			break
+		case top < H/10:
+			//drone.Up(25)
+			println("Drone should go up...")
+		case bottom > H-H/10:
+			//drone.Down(25)
+			println("Drone should go down...")
 		default:
-			drone.Forward(0)
-			println("Drone should not move forward...")
-			break
+			//drone.Up(0)
+			//drone.Down(0)
 		}
+
+		// Follow a face
+		//switch {
+		//case distance < refDistance-distTolerance:
+		//	drone.Forward(20)
+		//	println("Drone should move forward...")
+		//	break
+		//default:
+		//	drone.Forward(0)
+		//	println("Drone should not move forward...")
+		//	break
+		//}
 	}
+
+	//drone.Clockwise(0)
 }
 
 func handleGestures(img *gocv.Mat) {
@@ -300,7 +331,7 @@ func main() {
 	classifier = &cascadeClassifier
 	defer classifier.Close()
 
-	doTakeOff := true
+	doTakeOff := false
 
 	for {
 
@@ -335,7 +366,7 @@ func main() {
 
 		trackFace(&img)
 
-		handleGestures(&img)
+		//handleGestures(&img)
 
 		window.IMShow(img)
 		if window.WaitKey(10) >= 0 {
